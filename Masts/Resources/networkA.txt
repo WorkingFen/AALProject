@@ -1,8 +1,8 @@
-# kazda linia zaczynajaca sie od # jest ignorowana
-# kolejnosc danych bedzie zawsze taka sama
-# liczba wezlow, wezly numerowane sa od 1
-WEZLY = 7
-# kazdy wezel to trojka (identyfikator, wspolrzedna X, wspolrzedna Y)
+# Every line that starts with # will be ignored
+# Order of vertices is significant
+# Number of vertices. Vertices has been numbered from 1
+VERTICES = 7
+# Every vertex has four atributes (ID, X coordinate, Y coordinate, Distance[to next vertex])
 1 10 50 0
 2 30 56 0
 3 45 32 1
@@ -10,28 +10,3 @@ WEZLY = 7
 5 20 22 0
 6 26 89 1
 7 90 63 0
-# liczba krawedzi
-LACZA = 14
-# kazde lacze to trojka (identyfikator, wezel poczatkowy, wezel koncowy)
-1 1 2
-2 2 3
-3 3 4
-4 4 5
-5 5 1
-6 1 3
-7 1 4
-8 2 4
-9 2 5
-10 6 5
-11 6 2
-12 7 6
-13 7 3
-14 1 7
-# algorytm, ktory nalezy wywolac; mozliwosci: MST, SCIEZKA, FLOYD
-ALGORYTM = MST
-# jezeli algorytmem jest SCIEZKA to w kolejnej linii mamy pare interesujacych nas wezlow
-# 1 7
-# jezeli algorytmem jest FLOYD to w kolejnych liniach, az do konca pliku, mamy interesujace nas pary wezlow, np.
-# 2 3
-# 5 2
-# 3 6
