@@ -1,6 +1,6 @@
 # Problem grafowy
 
-Wszelkie informacje na temat projektu można znaleźć w [**dokumentacji**](https://github.com/WorkingFen/AALProject/blob/master/Dokumentacja) 
+Wszelkie informacje na temat projektu można znaleźć w [**dokumentacji**](https://github.com/WorkingFen/AALProject/blob/master/Dokumentacja.pdf) 
 
 ## Pierwsze kroki
 Zanim zaczniemy cokolwiek pobierać, to najpierw muszę cokolwiek zrobić.
