@@ -15,7 +15,7 @@ Zanim zaczniemy cokolwiek pobierać, to najpierw muszę cokolwiek zrobić.
 #### Instalacja biblioteki SFML dla Code::Blocks
 
 1. Wprowadź pobrane biblioteki SFML do katalogu, do ścieżki którego masz łatwy dostęp
-2. Utwórz nowy projekt Code::Blocks i [wprowadź pliki z repozytorium](#)
+2. Utwórz nowy projekt Code::Blocks i [wprowadź pliki z repozytorium](#wprowadzanie-plików-do-projektu-codeblocks)
 3. Przejdź do **_Build Options_** projektu
 4. Naciśnij nazwę projektu i przejdź do **_Linker settings_**
 5. Wprowadź w pole **_Other linker options_**:
