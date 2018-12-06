@@ -1,6 +1,6 @@
 # Problem grafowy
 
-Wszelkie informacje na temat projektu można znaleźć w [**dokumentacji**](/blob/master/Dokumentacja.pdf) 
+Wszelkie informacje na temat projektu można znaleźć w [**dokumentacji**](/Dokumentacja.pdf) 
 
 ## Pierwsze kroki
 Zanim zaczniemy cokolwiek pobierać, to najpierw muszę cokolwiek zrobić.
@@ -9,7 +9,7 @@ Zanim zaczniemy cokolwiek pobierać, to najpierw muszę cokolwiek zrobić.
 
 1. Pobranie [SFML](https://www.sfml-dev.org/download/sfml/2.5.1/)
    - Należy pobrać wersję odpowiednią dla swojego kompilatora oraz typu systemu operacyjnego.
-2. Pobranie wszystkich plików, które znajdują się w [tym](/tree/master/Masts) repozytorium
+2. Pobranie wszystkich plików, które znajdują się w [tym](https://github.com/WorkingFen/AALProject/tree/master/Masts) repozytorium
 
 ### Instalacja
 #### Instalacja biblioteki SFML dla Code::Blocks
@@ -62,8 +62,15 @@ Zanim zaczniemy cokolwiek pobierać, to najpierw muszę cokolwiek zrobić.
     ```
    
 15. Zapisz wprowadzone zmiany
-16. Do katalogu gdzie znajdują się pliki projektu należy dodać wszystkie biblioteki dynamiczne z katalogu **\bin** SFMLa
-   
+16. Dodaj wszystkie biblioteki dynamiczne z katalogu **\bin** SFMLa do katalogu gdzie znajdują się pliki projektu 
+
+#### Wprowadzanie plików do projektu Code::Blocks
+
+1. Dodaj pobrane pliki repozytorium do katalogu z plikami projektu
+2. Naciśnij PPM na nazwę projektu
+3. Wybierz opcję **_Add files_**
+4. Wybierz pliki, które chcesz dodać do projektu
+5. Zatwierdź wybór   
  
 ## Technologie
 Biblioteka graficzna - [SFML](https://www.sfml-dev.org/)
