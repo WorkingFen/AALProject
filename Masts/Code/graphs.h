@@ -1,30 +1,31 @@
 /**
 * Name: graphs.h
-* Purpose: Deklaracja namespace Graphs
+* Purpose: Declaration of namespace Graphs
 *
 * @version 1.03 14/05/2017
+* @author Piotr Zawadka
 */
 #pragma once
 
-#include <SFML/Graphics.hpp>
-#include "Instrukcje.h"
 #include <string>
+#include <SFML/Graphics.hpp>
+#include "instructions.h"
 
-///Namespace z logika graphs
+///Namespace with graphs logic
 namespace Graphs
 {
-    void zdarzenia(sf::Window &window, Instrukcje &instrukcje, std::vector<Wezel*> &wezly, std::vector<Lacze*> &lacza,
-                    unsigned &id_start, unsigned &id_koniec, std::string &algorytm, std::vector<Lacze*> &lacza_floyda,
-                    bool &zaladowane, Sciezka &sciezka, unsigned &koszt,
-                    unsigned &wyswietlane, std::vector<Sciezka*> &sciezki_floyda, std::vector<unsigned> &koszta);
+    void events(sf::Window &window, Instructions &instructions, std::vector<Vertex*> &vertices, std::vector<Edge*> &edges,
+                    unsigned &idStart, unsigned &idFinish, std::string &algorithm, std::vector<Edge*> &floydsEdges,
+                    bool &loaded, Path &path, unsigned &cost,
+                    unsigned &displayed, std::vector<Path*> &floydsPaths, std::vector<unsigned> &costs);
 
-    void pisz(sf::RenderWindow &window, const std::string msg, const unsigned x, const unsigned y,
+    void write(sf::RenderWindow &window, const std::string msg, const unsigned x, const unsigned y,
                     sf::Color color = sf::Color::White, unsigned size = 24);
 
-    void rysuj(sf::RenderWindow &window, Instrukcje &instrukcje, const std::string algorytm,
-                    int &klatka, int &pauza, bool zaladowane,
-                    std::vector<Wezel*> wezly, std::vector<Lacze*> lacza, std::vector<Lacze*> lacza_floyda,
-                    Sciezka sciezka, unsigned &koszt, unsigned wyswietlane,
-                    std::vector<Sciezka*> sciezki_floyda, std::vector<unsigned> koszta);
+    void draw(sf::RenderWindow &window, Instructions &instructions, const std::string algorithm,
+                    int &frame, int &pause, bool loaded,
+                    std::vector<Vertex*> vertices, std::vector<Edge*> edges, std::vector<Edge*> floydsEdges,
+                    Path path, unsigned &cost, unsigned displayed,
+                    std::vector<Path*> floydsPaths, std::vector<unsigned> costs);
 
 }

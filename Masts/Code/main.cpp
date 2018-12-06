@@ -2,50 +2,51 @@
 * Name: main.cpp
 * Purpose: main
 *
-* @version 0.01 18/11/2017
+* @version 0.1 05/12/2018
+* @author Piotr Zawadka
 */
 
 #include <iostream>
 #include <ctime>
+#include <cmath>
 #include <SFML/Graphics.hpp>
 #include "graphs.h"
-#include "Instrukcje.h"
-#include <cmath>
+#include "instructions.h"
 
 int main()
 {
-    std::vector<Wezel*> wezly;
-    std::vector<Lacze*> lacza;
-    std::vector<Lacze*> lacza_floyda;
-    std::vector<Sciezka*> sciezki_floyda;
-    std::vector<unsigned> koszta;
+    std::vector<Vertex*> vertices;
+    std::vector<Edge*> edges;
+    std::vector<Edge*> floydsEdges;
+    std::vector<Path*> floydsPaths;
+    std::vector<unsigned> costs;
 
-    unsigned id_start;
-    unsigned id_koniec;
-    unsigned koszt = 0;
-    unsigned wyswietlane = 0;
+    unsigned idStart;
+    unsigned idFinish;
+    unsigned cost = 0;
+    unsigned displayed = 0;
 
-    std::string algorytm;
+    std::string algorithm;
 
-    int pauza=0;
-    int klatka=1;
+    int pause=0;
+    int frame=1;
 
-    bool zaladowane = false;
+    bool loaded = false;
 
-    Instrukcje instrukcje;
-    Sciezka sciezka;
+    Instructions instructions;
+    Path path;
 
     srand(time(NULL));
 
-    sf::RenderWindow window(sf::VideoMode(1366, 768), "Grafy");
+    sf::RenderWindow window(sf::VideoMode(1366, 768), "Masts");
     window.setFramerateLimit(60);
 
     while (window.isOpen())
     {
-        Graphs::zdarzenia(window, instrukcje, wezly, lacza, id_start, id_koniec, algorytm,
-                        lacza_floyda, zaladowane, sciezka, koszt, wyswietlane, sciezki_floyda, koszta);
-        Graphs::rysuj(window, instrukcje, algorytm, klatka, pauza, zaladowane, wezly, lacza,
-                        lacza_floyda, sciezka, koszt, wyswietlane, sciezki_floyda, koszta);
+        Graphs::events(window, instructions, vertices, edges, idStart, idFinish, algorithm,
+                        floydsEdges, loaded, path, cost, displayed, floydsPaths, costs);
+        Graphs::draw(window, instructions, algorithm, frame, pause, loaded, vertices, edges,
+                        floydsEdges, path, cost, displayed, floydsPaths, costs);
     }
 }
 
