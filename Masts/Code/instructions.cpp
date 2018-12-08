@@ -2,7 +2,7 @@
 * Name: instructions.cpp
 * Purpose: Implementation of instructions
 *
-* @version 0.01 18/11/2017
+* @version 0.1 06/12/2018
 * @author Piotr Zawadka
 */
 
@@ -11,107 +11,98 @@
 #define ADD edges.at(iterators[which[id]][id])
 #define MX 500
 
-void Instructions::read(std::vector<Wezel*> &wezly, std::vector<Lacze*> &lacza, unsigned &id_start,
-                        unsigned &id_koniec, std::string &algorytm, std::vector<Lacze*> &lacza_floyda, bool &zaladowane)
+void Instructions::read(std::vector<Vertex*> &vertices, std::vector<Edge*> &edges, unsigned &idStart,
+                        unsigned &idFinish, std::string &algorithm, std::vector<Edge*> &floydsEdges, bool &loaded)
 {
-    std::string linia;
-    std::string pobrane;
-    std::string puste;
-    unsigned liczba_wezlow;
-    unsigned liczba_laczy;
-    unsigned id, w_id_0, w_id_1;
-    int for_switch;
-    bool opcjonalne;
+    std::string line;
+    std::string response;
+    std::string hollow;
+    unsigned verticesNum;
+    unsigned edgesNum;
+    unsigned id, idVer0, idVer1;
+    int forSwitch;
     double x,y;
 
-    this->ladowanie.open(plik + ".txt");
-    if(ladowanie.good())
+    this->loading.open("Resources/" + file + ".txt");
+    if(loading.good())
     {
-        while(!ladowanie.eof())
+        while(!loading.eof())
         {
-            ladowanie >> pobrane;
-            if(pobrane == "#")
+            loading >> response;
+            if(response == "#")
             {
-                std::getline(ladowanie, puste);
+                std::getline(loading, hollow);
                 continue;
             }
-            else if(pobrane == "WEZLY")
+            else if(response == "VERTICES")
             {
-                linia = pobrane;
-                ladowanie >> puste;
-                ladowanie >> liczba_wezlow;
+                line = response;
+                loading >> hollow;
+                loading >> verticesNum;
             }
-            else if(pobrane == "LACZA")
+            else if(response == "EDGES")
             {
-                linia = pobrane;
-                ladowanie >> puste;
-                ladowanie >> liczba_laczy;
+                line = response;
+                loading >> hollow;
+                loading >> edgesNum;
             }
-            else if(pobrane == "ALGORYTM")
+            else if(response == "ALGORITHM")
             {
-                linia = pobrane;
-                ladowanie >> puste;
-                ladowanie >> algorytm;
+                line = response;
+                loading >> hollow;
+                loading >> algorithm;
             }
-            else if(linia == "WEZLY")
+            else if(line == "VERTICES")
             {
-                id = atoi(pobrane.c_str());              ///Pierwsza liczba zostala juz pobrana; Usuwamy znak 0, by mieć liczbę;
-                ladowanie >> x;
-                ladowanie >> y;
-                ladowanie >> opcjonalne;                           /// steiner
-                //wezly.push_back(new Wezel(id, x, y)); /// to git
-                wezly.push_back(new Wezel(id, x, y, opcjonalne)); /// steiner
+                id = atoi(response.c_str());              ///Pierwsza liczba zostala juz pobrana; Usuwamy znak 0, by mieć liczbę;
+                loading >> x;
+                loading >> y;
+                vertices.push_back(new Vertex(id, x, y)); /// to git
 
-                for(int i=1; i<liczba_wezlow; i++)
+                for(int i=1; i<verticesNum; i++)
                 {
-                    ladowanie >> id;
-                    ladowanie >> x;
-                    ladowanie >> y;
-                    ladowanie >> opcjonalne;
-                    //wezly.push_back(new Wezel(id, x, y));     /// to git
-                    wezly.push_back(new Wezel(id, x, y, opcjonalne));
+                    loading >> id;
+                    loading >> x;
+                    loading >> y;
+                    vertices.push_back(new Vertex(id, x, y));     /// to git
                 }
             }
-            else if(linia == "LACZA")
+            else if(line == "EDGES")
             {
-                id = atoi(pobrane.c_str());                    ///Pierwsza liczba zostala juz pobrana; Usuwamy znak 0, by mieć liczbę;
-                ladowanie >> w_id_0;
-                ladowanie >> w_id_1;
-                //wezly.at(w_id_0-1)->dodaj_sasiada(w_id_1, wezly.at(w_id_1-1)->x, wezly.at(w_id_1-1)->y);/// to git
-                //wezly.at(w_id_1-1)->dodaj_sasiada(w_id_0, wezly.at(w_id_0-1)->x, wezly.at(w_id_0-1)->y);/// to git
-                wezly.at(w_id_0-1)->dodaj_sasiada(w_id_1, wezly.at(w_id_1-1)->x, wezly.at(w_id_1-1)->y, wezly.at(w_id_1-1)->opcjonalne);
-                wezly.at(w_id_1-1)->dodaj_sasiada(w_id_0, wezly.at(w_id_0-1)->x, wezly.at(w_id_0-1)->y, wezly.at(w_id_0-1)->opcjonalne);
-                lacza.push_back(new Lacze(id, wezly.at(w_id_0-1), wezly.at(w_id_1-1)));
+                id = atoi(response.c_str());                    ///Pierwsza liczba zostala juz pobrana; Usuwamy znak 0, by mieć liczbę;
+                loading >> idVer0;
+                loading >> idVer1;
+                vertices.at(idVer0-1)->addNeighbour(idVer1, vertices.at(idVer1-1)->x, vertices.at(idVer1-1)->y);/// to git
+                vertices.at(idVer1-1)->addNeighbour(idVer0, vertices.at(idVer0-1)->x, vertices.at(idVer0-1)->y);/// to git
+                edges.push_back(new Edge(id, vertices.at(idVer0-1), vertices.at(idVer1-1)));
 
-                for(int i=1; i<liczba_laczy; i++)
+                for(int i=1; i<edgesNum; i++)
                 {
-                    ladowanie >> id;
-                    ladowanie >> w_id_0;
-                    ladowanie >> w_id_1;
-                    //wezly.at(w_id_0-1)->dodaj_sasiada(w_id_1, wezly.at(w_id_1-1)->x, wezly.at(w_id_1-1)->y);
-                    //wezly.at(w_id_1-1)->dodaj_sasiada(w_id_0, wezly.at(w_id_0-1)->x, wezly.at(w_id_0-1)->y);
-                    wezly.at(w_id_0-1)->dodaj_sasiada(w_id_1, wezly.at(w_id_1-1)->x, wezly.at(w_id_1-1)->y, wezly.at(w_id_1-1)->opcjonalne);
-                    wezly.at(w_id_1-1)->dodaj_sasiada(w_id_0, wezly.at(w_id_0-1)->x, wezly.at(w_id_0-1)->y, wezly.at(w_id_0-1)->opcjonalne);
-                    lacza.push_back(new Lacze(id, wezly.at(w_id_0-1), wezly.at(w_id_1-1)));
+                    loading >> id;
+                    loading >> idVer0;
+                    loading >> idVer1;
+                    vertices.at(idVer0-1)->addNeighbour(idVer1, vertices.at(idVer1-1)->x, vertices.at(idVer1-1)->y);
+                    vertices.at(idVer1-1)->addNeighbour(idVer0, vertices.at(idVer0-1)->x, vertices.at(idVer0-1)->y);
+                    edges.push_back(new Edge(id, vertices.at(idVer0-1), vertices.at(idVer1-1)));
                 }
             }
-            else if(linia == "ALGORYTM")
+            else if(line == "ALGORITHM")
             {
-                if(algorytm == "SCIEZKA")
-                    for_switch = 1;
-                else if(algorytm == "FLOYD")
-                    for_switch = 2;
-                switch(for_switch)
+                if(algorithm == "PATH")
+                    forSwitch = 1;
+                else if(algorithm == "FLOYD")
+                    forSwitch = 2;
+                switch(forSwitch)
                 {
                     case 1:
-                        id_start = atoi(pobrane.c_str());
-                        ladowanie >> id_koniec;
+                        idStart = atoi(response.c_str());
+                        loading >> idFinish;
                     break;
 
                     case 2:
-                        w_id_0 = atoi(pobrane.c_str());            ///Pierwsza liczba zostala juz pobrana; Usuwamy znak 0, by mieć liczbę;
-                        ladowanie >> w_id_1;
-                        lacza_floyda.push_back(new Lacze(1, wezly.at(w_id_0-1), wezly.at(w_id_1-1)));
+                        idVer0 = atoi(response.c_str());            ///Pierwsza liczba zostala juz pobrana; Usuwamy znak 0, by mieć liczbę;
+                        loading >> idVer1;
+                        floydsEdges.push_back(new Edge(1, vertices.at(idVer0-1), vertices.at(idVer1-1)));
                     break;
                 }
             }
@@ -119,329 +110,289 @@ void Instructions::read(std::vector<Wezel*> &wezly, std::vector<Lacze*> &lacza, 
     }
     else
     {
-        std::string wiadomosc = "An error occurred while loading from file " + plik;
-        throw wiadomosc;
+        std::string msg = "An error occurred while loading from file " + file;
+        throw msg;
     }
-    this->ladowanie.close();
-    zaladowane = true;
+    this->loading.close();
+    loaded = true;
 }
 
-///Wezly jako wektor pobrany z pliku, to samo z laczami
-unsigned Instrukcje::algorytm_prima(std::vector<Wezel*> wezly, std::vector<Lacze*> lacza, Sciezka &sciezka)
+///Wezly jako wektor pobrany z pliku, to samo z edgesmi
+unsigned Instructions::primsAlgorithm(std::vector<Vertex*> vertices, std::vector<Edge*> edges, Path &path)
 {
 
-    Wezel* wierzcholek = wezly.at(0);                                   ///Wezel startowy
-    unsigned min_waga[wezly.size()+1];                                  ///Wagi polaczen do danych wezlow
-    bool zbadane[wezly.size()+1];
-    int nowe_id = 0;
-    unsigned polaczenia[wezly.size()+1][wezly.size()+1];                ///Lacza z wektora w formie tabeli
-    unsigned koszt = 0;
-    unsigned iteratory[MX][MX];
-    unsigned ktore[wezly.size()+1];
-    unsigned ile=0;
+    Vertex* vertex = vertices.at(0);                                   ///Vertex startowy
+    unsigned minScale[vertices.size()+1];                                  ///Wagi polaczen do danych wezlow
+    bool checked[vertices.size()+1];
+    int newID = 0;
+    unsigned connections[vertices.size()+1][vertices.size()+1];                ///Lacza z wektora w formie tabeli
+    unsigned cost = 0;
+    unsigned iterators[MX][MX];
+    unsigned which[vertices.size()+1];
+    unsigned num=0;
 
-    min_waga[0]=MX;
-    for(int i=1; i <=wezly.size(); i++)
+    minScale[0]=MX;
+    for(int i=1; i <=vertices.size(); i++)
     {
-        min_waga[i] = MX;
-        zbadane[i] = false;
-        ktore[i] = i;
-        iteratory[i][i] = 0;
+        minScale[i] = MX;
+        checked[i] = false;
+        which[i] = i;
+        iterators[i][i] = 0;
 
-        for(int q=1; q <=wezly.size(); q++)                             ///Wartosc poczatkowa tablic
+        for(int q=1; q <=vertices.size(); q++)                             ///Wartosc poczatkowa tablic
         {
-            polaczenia[i][q] = MX;
+            connections[i][q] = MX;
         }
-        polaczenia[i][i] = 0;
+        connections[i][i] = 0;
     }
 
-    zbadane[wierzcholek->id] = true;                                     ///Wierzcho³ek startowy jest zbadany
-    min_waga[wierzcholek->id]=0;
+    checked[vertex->id] = true;                                     ///Wierzcho³ek startowy jest zbadany
+    minScale[vertex->id]=0;
 
-    for(int iter = 0; iter < lacza.size(); iter++)      ///Tworzenie tablicy po³¹czeñ od konkretnych wêz³ów z wagami ³¹czy
+    for(int iter = 0; iter < edges.size(); iter++)      ///Tworzenie tablicy po³¹czeñ od konkretnych wêz³ów z wagami ³¹czy
     {
-        polaczenia[lacza.at(iter)->w_id[0]][lacza.at(iter)->w_id[1]] = lacza.at(iter)->waga;
-        polaczenia[lacza.at(iter)->w_id[1]][lacza.at(iter)->w_id[0]] = lacza.at(iter)->waga;
-        iteratory[lacza.at(iter)->w_id[0]][lacza.at(iter)->w_id[1]] = iter;   ///Iteratory ³acza dla odpowiednich wez³ow
-        iteratory[lacza.at(iter)->w_id[1]][lacza.at(iter)->w_id[0]] = iter;   ///Iteratory ³acza dla odpowiednich wez³ow
+        connections[edges.at(iter)->idVer[0]][edges.at(iter)->idVer[1]] = edges.at(iter)->scale;
+        connections[edges.at(iter)->idVer[1]][edges.at(iter)->idVer[0]] = edges.at(iter)->scale;
+        iterators[edges.at(iter)->idVer[0]][edges.at(iter)->idVer[1]] = iter;   ///Iteratory ³acza dla odpowiednich wez³ow
+        iterators[edges.at(iter)->idVer[1]][edges.at(iter)->idVer[0]] = iter;   ///Iteratory ³acza dla odpowiednich wez³ow
     }
 
-    while(ile != wezly.size()-1)                                        ///Iteracja a¿ do ostatniego wierzcho³ka
+    while(num != vertices.size()-1)                                        ///Iteracja a¿ do ostatniego wierzcho³ka
     {
-        ile++;
-        for(int id=2; id <= wezly.size(); id++)                         ///Poszukiwany s¹siad o danym ID; Zaczynamy od ID=2 bo 1 zbadana
+        num++;
+        for(int id=2; id <= vertices.size(); id++)                         ///Poszukiwany s¹siad o danym ID; Zaczynamy od ID=2 bo 1 zbadana
         {
-            for(int k=0; k < wierzcholek->sasiedzi.size(); k++)         ///Szukamy tego ID w wêz³ach, które sa s¹siadami; k=0 bo wektor
+            for(int k=0; k < vertex->neighbours.size(); k++)         ///Szukamy tego ID w wêz³ach, które sa s¹siadami; k=0 bo wektor
             {
-                if(wierzcholek->sasiedzi.at(k)->id == id);             /// Polaczenie istnieje
+                if(vertex->neighbours.at(k)->id == id);             /// Polaczenie istnieje
                 {
-                    if(!zbadane[id])                                    ///Gdy niezbadane to dzia³aj dalej
+                    if(!checked[id])                                    ///Gdy niechecked to dzia³aj dalej
                     {
-                        if(min_waga[id] > polaczenia[wierzcholek->id][id])///Gdy waga minimalna po³¹czenia z wêz³em id jest wiêksza, od nowego po³¹czenia
+                        if(minScale[id] > connections[vertex->id][id])///Gdy waga minimalna po³¹czenia z wêz³em id jest wiêksza, od nowego po³¹czenia
                         {
-                            min_waga[id] = polaczenia[wierzcholek->id][id];
-                            ktore[id] = wierzcholek->id;                 ///Dla ktorego wierzcholka.id, polaczenie z ID jest najmniejsze, nadpisujemy
+                            minScale[id] = connections[vertex->id][id];
+                            which[id] = vertex->id;                 ///Dla ktorego wierzcholka.id, polaczenie z ID jest najmniejsze, nadpisujemy
                         }
                     }
                 }
             }
         }
-        nowe_id=0;
-        for(int i=1; i<=wezly.size(); i++)                                  /// Szukamy sąsiada o najmniejszej wadze, by do niego przejsc
+        newID=0;
+        for(int i=1; i<=vertices.size(); i++)                                  /// Szukamy sąsiada o najmniejszej wadze, by do niego przejsc
         {
-            if(!zbadane[i])
+            if(!checked[i])
             {
-                if(min_waga[nowe_id]>min_waga[i])
-                    nowe_id=i;
+                if(minScale[newID]>minScale[i])
+                    newID=i;
             }
         }
-        wierzcholek = wezly.at(nowe_id-1);
-        zbadane[wierzcholek->id] = true;                                  /// Zbadalismy juz kolejny wierzcholek, od wierzcholek.id bo juz zwiekszylismy n++
+        vertex = vertices.at(newID-1);
+        checked[vertex->id] = true;                                  /// Zbadalismy juz kolejny wierzcholek, od wierzcholek.id bo juz zwiekszylismy n++
     }
 
-    for(int id=2; id<=wezly.size(); id++)                                       ///Liczenie kosztu drzewa rozpinaj¹cego
+    for(int id=2; id<=vertices.size(); id++)                                       ///Liczenie kosztu drzewa rozpinaj¹cego
     {
-        sciezka.dodaj_lacze(DODANIE->id, wezly.at(ktore[id]-1), wezly.at(id-1), DODANIE->waga);      ///Zapis kolejnych przejsc algorytmu, id lacza, wezel_start, wezel_koniec
-        koszt += min_waga[id];
+        path.addEdge(ADD->id, vertices.at(which[id]-1), vertices.at(id-1), ADD->scale);      ///Zapis kolejnych przejsc algorithmu, id lacza, wezel_start, wezel_koniec
+        cost += minScale[id];
     }
 
 
-    return koszt;
+    return cost;
 }
-
-unsigned Instrukcje::algorytm_steinera(std::vector<Wezel*> wezly, std::vector<Lacze*> lacza, Sciezka &sciezka)
-{
-    std::vector<Sciezka> sciezki;
-    unsigned nowy_koszt;
-    int id_start;
-    int id_koniec=0;
-    int naj_koszt=0;
-
-    for(int i=0; i<wezly.size(); i++)
-    {
-        if(wezly.at(i)->opcjonalne==0)
-        {
-            id_start=(i+1);
-            break;
-        }
-    }
-
-    for(int i=0; i<wezly.size(); i++)
-    {
-        if(wezly.at(i)->opcjonalne==0)
-        {
-            if(id_start!=(i+1))
-            {
-                id_koniec=(i+1);
-                algorytm_dijkstry(wezly, lacza, sciezka, id_start, id_koniec);
-                sciezki.push_back(sciezka);
-                sciezka.czysc();
-            }
-        }
-    }
-
-    for(int i=0; i<sciezka.sciezka.size(); i++)
-    {
-        naj_koszt += sciezka.sciezka.at(i)->koszt();
-    }
-
-    return naj_koszt;
-}
-
 
 ///Wezly jako wektor pobrany z pliku, to samo z laczami i pobranymi id startu i konca
-unsigned Instrukcje::algorytm_dijkstry(std::vector<Wezel*> wezly, std::vector<Lacze*> lacza, Sciezka &sciezka, unsigned id_start, unsigned id_koniec)
+unsigned Instructions::dijkstrasAlgorithm(std::vector<Vertex*> vertices, std::vector<Edge*> edges, Path &path, unsigned idStart, unsigned idFinish)
 {
-    Wezel* wierzcholek = wezly.at(id_start-1);                          ///Wezel startowy, zaczynamy od elementu o id-1, bo tablica
-    unsigned min_waga[wezly.size()+1];                                  ///Wagi polaczen do danych wezlow
-    bool ocechowane[wezly.size()+1];
-    int nowe_id = 0;
-    unsigned polaczenia[wezly.size()+1][wezly.size()+1];                ///Lacza z wektora w formie tabeli
-    unsigned koszt = 0;
-    unsigned iteratory[MX][MX];
-    unsigned ktore[wezly.size()+1];
-    unsigned ilosc = 0;
+    Vertex* vertex = vertices.at(idStart-1);                          ///Wezel startowy, zaczynamy od elementu o id-1, bo tablica
+    unsigned minScale[vertices.size()+1];                                  ///Wagi polaczen do danych wezlow
+    bool marked[vertices.size()+1];
+    int newID = 0;
+    unsigned connections[vertices.size()+1][vertices.size()+1];                ///Lacza z wektora w formie tabeli
+    unsigned cost = 0;
+    unsigned iterators[MX][MX];
+    unsigned which[vertices.size()+1];
+    unsigned quantity = 0;
 
-    min_waga[0]=MX;
-    for(int i=1; i <=wezly.size(); i++)
+    minScale[0]=MX;
+    for(int i=1; i <=vertices.size(); i++)
     {
-        min_waga[i] = MX;
-        ocechowane[i] = false;
-        ktore[i] = i;
-        iteratory[i][i] = MX;
+        minScale[i] = MX;
+        marked[i] = false;
+        which[i] = i;
+        iterators[i][i] = MX;
 
-        for(int q=1; q <=wezly.size(); q++)                                       ///Wartosc poczatkowa tablic
+        for(int q=1; q <=vertices.size(); q++)                                       ///Wartosc poczatkowa tablic
         {
-            polaczenia[i][q] = MX;
+            connections[i][q] = MX;
         }
-        polaczenia[i][i] = 0;
+        connections[i][i] = 0;
     }
 
-    ocechowane[wierzcholek->id] = true;                                  ///Wierzcho³ek startowy jest zbadany
-    min_waga[wierzcholek->id]=0;
+    marked[vertex->id] = true;                                  ///Wierzcho³ek startowy jest zbadany
+    minScale[vertex->id]=0;
 
 
-    for(unsigned iter = 0; iter < lacza.size(); iter++)      ///Tworzenie tablicy polaczen od konkretnych wezlow z wagami laczy
+    for(unsigned iter = 0; iter < edges.size(); iter++)      ///Tworzenie tablicy polaczen od konkretnych wezlow z wagami laczy
     {
-        polaczenia[lacza.at(iter)->w_id[0]][lacza.at(iter)->w_id[1]] = lacza.at(iter)->waga;        ///Lacza sa nieskierowane
-        polaczenia[lacza.at(iter)->w_id[1]][lacza.at(iter)->w_id[0]] = lacza.at(iter)->waga;
-        iteratory[lacza.at(iter)->w_id[0]][lacza.at(iter)->w_id[1]] = iter;   ///Iteratory lacza miedzy odpowiednimi wezlami
-        iteratory[lacza.at(iter)->w_id[1]][lacza.at(iter)->w_id[0]] = iter;
+        connections[edges.at(iter)->idVer[0]][edges.at(iter)->idVer[1]] = edges.at(iter)->scale;        ///Lacza sa nieskierowane
+        connections[edges.at(iter)->idVer[1]][edges.at(iter)->idVer[0]] = edges.at(iter)->scale;
+        iterators[edges.at(iter)->idVer[0]][edges.at(iter)->idVer[1]] = iter;   ///Iteratory edges miedzy odpowiednimi wezlami
+        iterators[edges.at(iter)->idVer[1]][edges.at(iter)->idVer[0]] = iter;
     }
 
-    while(wierzcholek->id != id_koniec)             ///Iteracja az do docelowego wierzcholka
+    while(vertex->id != idFinish)             ///Iteracja az do docelowego wierzcholka
     {
-        ilosc++;
-        for(int id=1; id <= wezly.size(); id++)                         ///Poszukiwany sasiad o danym ID
+        quantity++;
+        for(int id=1; id <= vertices.size(); id++)                         ///Poszukiwany sasiad o danym ID
         {
-            for(int k=0; k < wierzcholek->sasiedzi.size(); k++)         ///Szukamy tego ID w wezlach, które sa sasiadami; k=0 bo wektor
+            for(int k=0; k < vertex->neighbours.size(); k++)         ///Szukamy tego ID w wezlach, które sa sasiadami; k=0 bo wektor
             {
-                if(wierzcholek->sasiedzi.at(k)->id == id);             /// Polaczenie istnieje
+                if(vertex->neighbours.at(k)->id == id);             /// Polaczenie istnieje
                 {
-                    if(!ocechowane[id])                                 ///Gdy niezbadane to dzialaj dalej
+                    if(!marked[id])                                 ///Gdy niechecked to dzialaj dalej
                     {
-                        if(min_waga[id] > min_waga[wierzcholek->id]+polaczenia[wierzcholek->id][id])   ///Gdy poprzednio zapisana waga jest wieksza od obecnie rozpatrywanej sciezki
+                        if(minScale[id] > minScale[vertex->id]+connections[vertex->id][id])   ///Gdy poprzednio zapisana waga jest wieksza od obecnie rozpatrywanej sciezki
                         {
-                            min_waga[id] = min_waga[wierzcholek->id]+polaczenia[wierzcholek->id][id];
-                            ktore[id] = wierzcholek->id;          ///Dla ktorego wierzcholek.id , polaczenie z ID jest najmniejsze, nadpisujemy
+                            minScale[id] = minScale[vertex->id]+connections[vertex->id][id];
+                            which[id] = vertex->id;          ///Dla ktorego wierzcholek.id , polaczenie z ID jest najmniejsze, nadpisujemy
                         }
                     }
                 }
             }
         }
-        nowe_id = 0;
-        for(int i=1; i<=wezly.size(); i++)                               /// Szukamy sąsiada o najmniejszej wadze, by do niego przejsc
+        newID = 0;
+        for(int i=1; i<=vertices.size(); i++)                               /// Szukamy sąsiada o najmniejszej wadze, by do niego przejsc
         {
-            if(i == id_koniec)
+            if(i == idFinish)
             {
-                if(ilosc == wezly.size()-1)
-                    nowe_id=i;
+                if(quantity == vertices.size()-1)
+                    newID=i;
             }
-            else if(!ocechowane[i])
+            else if(!marked[i])
             {
-                if(min_waga[nowe_id]>min_waga[i])
-                    nowe_id=i;
+                if(minScale[newID]>minScale[i])
+                    newID=i;
             }
         }
-        wierzcholek = wezly.at(nowe_id-1);
-        ocechowane[wierzcholek->id] = true;                          /// Zbadalismy juz kolejny wierzcholek, od wierzcholek.id bo juz zwiekszylismy nowe_id++
+        vertex = vertices.at(newID-1);
+        marked[vertex->id] = true;                          /// Zbadalismy juz kolejny wierzcholek, od wierzcholek.id bo juz zwiekszylismy nowe_id++
     }
 
-    koszt = min_waga[wierzcholek->id];
+    cost = minScale[vertex->id];
 
-    unsigned id = wierzcholek->id;
+    unsigned id = vertex->id;
 
-    while(id != id_start)                                                  ///Tworzenie sciezki
+    while(id != idStart)                                                  ///Tworzenie sciezki
     {
-        sciezka.dodaj_lacze(DODANIE->id, wezly.at(ktore[id]-1), wezly.at(id-1), DODANIE->waga);      ///Zapis kolejnych przejsc algorytmu, id, wezel_start, wezel_koniec
-        id = ktore[id];
+        path.addEdge(ADD->id, vertices.at(which[id]-1), vertices.at(id-1), ADD->scale);      ///Zapis kolejnych przejsc algorithmu, id, wezel_start, wezel_koniec
+        id = which[id];
     }
 
-    return koszt;
+    return cost;
 }
 
-void Instrukcje::algorytm_floyda(std::vector<Wezel*> wezly, std::vector<Lacze*> lacza,
-                                     std::vector<Lacze*> lacza_floyda, std::vector<Sciezka*> &sciezki_floyda,
-                                     std::vector<unsigned> &koszta)
+void Instructions::floydsAlgorithm(std::vector<Vertex*> vertices, std::vector<Edge*> edges,
+                                     std::vector<Edge*> floydsEdges, std::vector<Path*> &floydsPaths,
+                                     std::vector<unsigned> &costs)
 {
-    Wezel* wierzcholek;
-    int min_waga[wezly.size()+1];                                  ///Wagi polaczen do danych wezlow
-    bool ocechowane[wezly.size()+1];
-    int nowe_id;
-    int polaczenia[wezly.size()+1][wezly.size()+1];                ///Lacza z wektora w formie tabeli
-    int koszt;
-    unsigned iteratory[MX][MX];
-    unsigned ktore[wezly.size()+1];
-    unsigned ilosc;
-    Sciezka *sciezka;
+    Vertex* vertex;
+    int minScale[vertices.size()+1];                                  ///Wagi polaczen do danych wezlow
+    bool marked[vertices.size()+1];
+    int newID;
+    int connections[vertices.size()+1][vertices.size()+1];                ///Lacza z wektora w formie tabeli
+    int cost;
+    unsigned iterators[MX][MX];
+    unsigned which[vertices.size()+1];
+    unsigned quantity;
+    Path *path;
 
-    min_waga[0]=MX;
+    minScale[0]=MX;
 
-    for(int i=1; i <=wezly.size(); i++)                             ///Zerowanie polaczen i iteratorow
+    for(int i=1; i <=vertices.size(); i++)                             ///Zerowanie polaczen i iteratorow
     {
-        polaczenia[i][i] = 0;
-        iteratory[i][i] = 0;
+        connections[i][i] = 0;
+        iterators[i][i] = 0;
 
-        for(int q=1; q <=wezly.size(); q++)                         ///Wartosc poczatkowa tablic
+        for(int q=1; q <=vertices.size(); q++)                         ///Wartosc poczatkowa tablic
         {
-            polaczenia[i][q] = MX;
+            connections[i][q] = MX;
         }
     }
 
-    for(unsigned iter = 0; iter < lacza.size(); iter++)      ///Tworzenie tablicy polaczen od konkretnych wezlow z wagami laczy
+    for(unsigned iter = 0; iter < edges.size(); iter++)      ///Tworzenie tablicy polaczen od konkretnych wezlow z wagami laczy
     {
-        polaczenia[lacza.at(iter)->w_id[0]][lacza.at(iter)->w_id[1]] = lacza.at(iter)->waga;        ///Lacza sa skierowane
-        iteratory[lacza.at(iter)->w_id[0]][lacza.at(iter)->w_id[1]] = iter;   ///Iteratory lacza miedzy odpowiednimi wezlami
+        connections[edges.at(iter)->idVer[0]][edges.at(iter)->idVer[1]] = edges.at(iter)->scale;        ///Lacza sa skierowane
+        iterators[edges.at(iter)->idVer[0]][edges.at(iter)->idVer[1]] = iter;   ///Iteratory edges miedzy odpowiednimi wezlami
     }
 
-    for(unsigned iteracja=0; iteracja < lacza_floyda.size(); iteracja++)
+    for(unsigned iteration=0; iteration < floydsEdges.size(); iteration++)
     {
-        wierzcholek = wezly.at(lacza_floyda.at(iteracja)->w_id[0]-1);                          ///Wezel startowy, zaczynamy od elementu o id-1, bo tablica
-        nowe_id = 0;
-        koszt = 0;
-        ilosc = 0;
+        vertex = vertices.at(floydsEdges.at(iteration)->idVer[0]-1);                          ///Wezel startowy, zaczynamy od elementu o id-1, bo tablica
+        newID = 0;
+        cost = 0;
+        quantity = 0;
 
-        for(int i=1; i <=wezly.size(); i++)
+        for(int i=1; i <=vertices.size(); i++)
         {
-            min_waga[i] = MX;
-            ocechowane[i] = false;
-            ktore[i] = i;
+            minScale[i] = MX;
+            marked[i] = false;
+            which[i] = i;
         }
 
-        ocechowane[wierzcholek->id] = true;                                  ///Wierzcholek startowy jest zbadany
-        min_waga[wierzcholek->id]=0;
+        marked[vertex->id] = true;                                  ///Wierzcholek startowy jest zbadany
+        minScale[vertex->id]=0;
 
-        while(wierzcholek->id != lacza_floyda.at(iteracja)->w_id[1])             ///Iteracja az do docelowego wierzcholka
+        while(vertex->id != floydsEdges.at(iteration)->idVer[1])             ///Iteracja az do docelowego wierzcholka
         {
-            ilosc++;
-            for(int id=1; id <= wezly.size(); id++)                         ///Poszukiwany sasiad o danym ID
+            quantity++;
+            for(int id=1; id <= vertices.size(); id++)                         ///Poszukiwany sasiad o danym ID
             {
-                for(int k=0; k < wierzcholek->sasiedzi.size(); k++)         ///Szukamy tego ID w wezlach, które sa sasiadami; k=0 bo wektor
+                for(int k=0; k < vertex->neighbours.size(); k++)         ///Szukamy tego ID w wezlach, które sa sasiadami; k=0 bo wektor
                 {
-                    if(wierzcholek->sasiedzi.at(k)->id == id && polaczenia[wierzcholek->id][id] != MX)             /// Polaczenie istnieje
+                    if(vertex->neighbours.at(k)->id == id && connections[vertex->id][id] != MX)             /// Polaczenie istnieje
                     {
-                        if(!ocechowane[id])                                 ///Gdy niezbadane to dzialaj dalej
+                        if(!marked[id])                                 ///Gdy niechecked to dzialaj dalej
                         {
-                            if(min_waga[id] > min_waga[wierzcholek->id]+polaczenia[wierzcholek->id][id])   ///Gdy poprzednio zapisana waga jest wieksza od obecnie rozpatrywanej sciezki
+                            if(minScale[id] > minScale[vertex->id]+connections[vertex->id][id])   ///Gdy poprzednio zapisana waga jest wieksza od obecnie rozpatrywanej sciezki
                             {
-                                min_waga[id] = min_waga[wierzcholek->id]+polaczenia[wierzcholek->id][id];
-                                ktore[id] = wierzcholek->id;          ///Dla ktorego wierzcholek.id , polaczenie z ID jest najmniejsze, nadpisujemy
+                                minScale[id] = minScale[vertex->id]+connections[vertex->id][id];
+                                which[id] = vertex->id;          ///Dla ktorego wierzcholek.id , polaczenie z ID jest najmniejsze, nadpisujemy
                             }
                         }
                     }
                 }
             }
-            nowe_id = 0;
-            for(int i=1; i<=wezly.size(); i++)                               /// Szukamy sąsiada o najmniejszej wadze, by do niego przejsc
+            newID = 0;
+            for(int i=1; i<=vertices.size(); i++)                               /// Szukamy sąsiada o najmniejszej wadze, by do niego przejsc
             {
-                if(i == lacza_floyda.at(iteracja)->w_id[1])
+                if(i == floydsEdges.at(iteration)->idVer[1])
                 {
-                    if(ilosc == wezly.size()-1)
-                        nowe_id=i;
+                    if(quantity == vertices.size()-1)
+                        newID=i;
                 }
-                else if(!ocechowane[i])
+                else if(!marked[i])
                 {
-                    if(min_waga[nowe_id]>min_waga[i])
-                        nowe_id=i;
+                    if(minScale[newID]>minScale[i])
+                        newID=i;
                 }
             }
-            wierzcholek = wezly.at(nowe_id-1);
-            ocechowane[wierzcholek->id] = true;                          /// Zbadalismy juz kolejny wierzcholek, od wierzcholek.id bo juz zwiekszylismy nowe_id++
+            vertex = vertices.at(newID-1);
+            marked[vertex->id] = true;                          /// Zbadalismy juz kolejny wierzcholek, od wierzcholek.id bo juz zwiekszylismy nowe_id++
         }
 
-        koszt = min_waga[wierzcholek->id];
+        cost = minScale[vertex->id];
 
-        unsigned id = wierzcholek->id;
+        unsigned id = vertex->id;
 
-        sciezka = new Sciezka();
-        while(id != lacza_floyda.at(iteracja)->w_id[0])                                                  ///Tworzenie sciezki
+        path = new Path();
+        while(id != floydsEdges.at(iteration)->idVer[0])                                                  ///Tworzenie sciezki
         {
-            sciezka->dodaj_lacze(DODANIE->id, wezly.at(ktore[id]-1), wezly.at(id-1), DODANIE->waga);      ///Zapis kolejnych przejsc algorytmu, id, wezel_start, wezel_koniec
-            id = ktore[id];
+            path->addEdge(ADD->id, vertices.at(which[id]-1), vertices.at(id-1), ADD->scale);      ///Zapis kolejnych przejsc algorithmu, id, wezel_start, wezel_koniec
+            id = which[id];
         }
-        sciezki_floyda.push_back(sciezka);
+        floydsPaths.push_back(path);
 
-        koszta.push_back(koszt);
+        costs.push_back(cost);
     }
 
 }

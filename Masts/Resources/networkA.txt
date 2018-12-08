@@ -2,11 +2,36 @@
 # Order of vertices is significant
 # Number of vertices. Vertices has been numbered from 1
 VERTICES = 7
-# Every vertex has four atributes (ID, X coordinate, Y coordinate, Distance[to next vertex])
-1 10 50 0
-2 30 56 0
-3 45 32 1
-4 90 28 0
-5 20 22 0
-6 26 89 1
-7 90 63 0
+# Every vertex has three or four atributes (ID, X coordinate, Y coordinate, Distance[to next vertex])
+# 1 10 50 0
+# 2 30 56 0
+# 3 45 32 1
+# 4 90 28 0
+# 5 20 22 0
+# 6 26 89 1
+# 7 90 63 0
+1 10 50
+2 30 56
+3 45 32
+4 90 28
+5 20 22
+6 26 89
+7 90 63
+# Number of edges
+EDGES = 7
+# Every edge has three atributes (ID, first vertex, last vertex)
+1 1 2
+2 2 3
+3 3 4
+4 4 5
+5 5 6
+6 6 7
+7 7 1
+# Algorithm, which will be called; [MST, PATH, FLOYD]
+ALGORITHM = MST
+# If algorithm is of type PATH then in next line we need to specify pair of vertices we are interested in
+# 1 7
+# If algorithm is of type FLOYD then in next lines we need to specify pairs of vertices we are interested in
+# 2 3
+# 5 2
+# 3 6

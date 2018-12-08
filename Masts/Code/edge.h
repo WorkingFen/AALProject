@@ -2,7 +2,7 @@
 * Name: edge.h
 * Purpose: Declaration of edge
 *
-* @version 0.01 18/11/2017
+* @version 0.1 06/12/2018
 * @author Piotr Zawadka
 */
 #pragma once
@@ -51,11 +51,11 @@ class Edge{
             idVer[0] = start->id;
             idVer[1] = fin->id;
             this->scale = scale;
-            linia = sf::VertexArray(sf::Lines, 2);
-            linia[0].position = sf::Vector2f(start->x*8 + 210, start->y*8+10);
-            linia[1].position = sf::Vector2f(fin->x*8 + 210, fin->y*8+10);
-            linia[0].color = sf::Color::White;
-            linia[1].color = sf::Color::White;
+            line = sf::VertexArray(sf::Lines, 2);
+            line[0].position = sf::Vector2f(start->x*8 + 210, start->y*8+10);
+            line[1].position = sf::Vector2f(fin->x*8 + 210, fin->y*8+10);
+            line[0].color = sf::Color::White;
+            line[1].color = sf::Color::White;
         }
 
         void zero()

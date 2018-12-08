@@ -2,7 +2,7 @@
 * Name: path.h
 * Purpose: Declaration of path
 *
-* @version 0.01 18/11/2017
+* @version 0.1 06/12/2018
 * @author Piotr Zawadka
 */
 #pragma once

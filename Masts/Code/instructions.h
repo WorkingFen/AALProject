@@ -2,7 +2,7 @@
 * Name: instructions.h
 * Purpose: Declaration of instructions
 *
-* @version 0.01 18/11/2017
+* @version 0.1 06/12/2018
 * @author Piotr Zawadka
 */
 #pragma once
@@ -29,9 +29,8 @@ class Instructions{
 
         unsigned primsAlgorithm(std::vector<Vertex*> vertices, std::vector<Edge*> edges, Path &path);
 
-        unsigned steinersAlgorithm(std::vector<Vertex*> vertices, std::vector<Edge*> edges, Path &path);
-
-        unsigned dijkstrasAlgorithm(std::vector<Vertex*> vertices, std::vector<Edge*> edges, Path &path, unsigned idStart, unsigned idFinish);
+        unsigned dijkstrasAlgorithm(std::vector<Vertex*> vertices, std::vector<Edge*> edges, Path &path,
+                                    unsigned idStart, unsigned idFinish);
 
         void floydsAlgorithm(std::vector<Vertex*> vertices, std::vector<Edge*> edges,
                                  std::vector<Edge*> floydsEdges, std::vector<Path*> &floydsPaths,
