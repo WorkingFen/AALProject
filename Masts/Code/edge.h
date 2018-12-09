@@ -13,19 +13,17 @@
 #include "vertex.h"
 
 class Edge{
-    public:
+    private:
         unsigned id;
         Vertex* vertices[2];
-        unsigned idVer[2];
         unsigned scale;
         sf::VertexArray line;
 
+    public:
         Edge(): id(0), scale(0)
         {
             vertices[0] = nullptr;
             vertices[1] = nullptr;
-            idVer[0] = 0;
-            idVer[1] = 0;
         }
 
         Edge(unsigned id, Vertex* start, Vertex* fin)
@@ -33,14 +31,11 @@ class Edge{
             this->id = id;
             vertices[0] = start;
             vertices[1] = fin;
-            idVer[0] = start->id;
-            idVer[1] = fin->id;
             scale = (std::rand() % 50) + 1;
             line = sf::VertexArray(sf::Lines, 2);
-            line[0].position = sf::Vector2f(start->x*8 + 210, start->y*8+10);
-            line[1].position = sf::Vector2f(fin->x*8 + 210, fin->y*8+10);
-            line[0].color = sf::Color::White;
-            line[1].color = sf::Color::White;
+            line[0].position = sf::Vector2f(start->getX()*8 + 210, start->getY()*8+10);
+            line[1].position = sf::Vector2f(fin->getX()*8 + 210, fin->getY()*8+10);
+            changeLineColor(sf::Color::White);
         }
 
         Edge(unsigned id, Vertex* start, Vertex* fin, unsigned scale)
@@ -48,14 +43,15 @@ class Edge{
             this->id = id;
             vertices[0] = start;
             vertices[1] = fin;
-            idVer[0] = start->id;
-            idVer[1] = fin->id;
             this->scale = scale;
             line = sf::VertexArray(sf::Lines, 2);
-            line[0].position = sf::Vector2f(start->x*8 + 210, start->y*8+10);
-            line[1].position = sf::Vector2f(fin->x*8 + 210, fin->y*8+10);
-            line[0].color = sf::Color::White;
-            line[1].color = sf::Color::White;
+            line[0].position = sf::Vector2f(start->getX()*8 + 210, start->getY()*8+10);
+            line[1].position = sf::Vector2f(fin->getX()*8 + 210, fin->getY()*8+10);
+            changeLineColor(sf::Color::White);
+        }
+
+        ~Edge()
+        {
         }
 
         void zero()
@@ -63,13 +59,38 @@ class Edge{
             scale = 0;
         }
 
-        unsigned cost()
-        {
-            return scale;
+        unsigned getID(){ return id; }
+
+        unsigned getScale(){ return scale; }
+
+        Vertex* getVertex(unsigned index){ return vertices[index]; }
+
+        unsigned getIDVer(unsigned index){ return vertices[index]->getID(); }
+
+        sf::VertexArray getLine(){ return line; }
+
+        void changeLineColor(sf::Color color){
+             line[0].color = color;
+             line[1].color = color;
         }
 
-        ~Edge()
-        {
+        void changeLineColor(sf::Color color, sf::Color color2){
+             line[0].color = color;
+             line[1].color = color2;
         }
+
+/// /// /// /// /// /// /// /// Functions other than for Edge
+/// /// Vertex functions
+///
+        double getVertexX(unsigned index){ return vertices[index]->getX(); }
+///
+        double getVertexY(unsigned index){ return vertices[index]->getY(); }
+///
+        void changeVertexColor(unsigned index, sf::Color color){ vertices[index]->setOutlineColor(color); }
+///
+        sf::CircleShape getVertexCircle(unsigned index){ return vertices[index]->getCircle(); }
+///
+/// ###
+/// /// /// /// /// /// ###
 
 };

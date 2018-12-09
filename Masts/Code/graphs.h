@@ -11,6 +11,10 @@
 #include <SFML/Graphics.hpp>
 #include "instructions.h"
 
+#define WIDTH 1366
+#define HEIGHT
+#define BACKGROUND sf::Color(8,8,16)
+
 ///Namespace with graphs logic
 namespace Graphs
 {

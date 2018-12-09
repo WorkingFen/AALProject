@@ -21,7 +21,7 @@ void Instructions::read(std::vector<Vertex*> &vertices, std::vector<Edge*> &edge
     unsigned edgesNum;
     unsigned id, idVer0, idVer1;
     int forSwitch;
-    double x,y;
+    double x, y;
 
     this->loading.open("Resources/" + file + ".txt");
     if(loading.good())
@@ -57,14 +57,14 @@ void Instructions::read(std::vector<Vertex*> &vertices, std::vector<Edge*> &edge
                 id = atoi(response.c_str());              ///Pierwsza liczba zostala juz pobrana; Usuwamy znak 0, by mieć liczbę;
                 loading >> x;
                 loading >> y;
-                vertices.push_back(new Vertex(id, x, y)); /// to git
+                vertices.push_back(new Vertex(id, x, y));
 
-                for(int i=1; i<verticesNum; i++)
+                for(unsigned i=1; i<verticesNum; i++)
                 {
                     loading >> id;
                     loading >> x;
                     loading >> y;
-                    vertices.push_back(new Vertex(id, x, y));     /// to git
+                    vertices.push_back(new Vertex(id, x, y));
                 }
             }
             else if(line == "EDGES")
@@ -72,17 +72,17 @@ void Instructions::read(std::vector<Vertex*> &vertices, std::vector<Edge*> &edge
                 id = atoi(response.c_str());                    ///Pierwsza liczba zostala juz pobrana; Usuwamy znak 0, by mieć liczbę;
                 loading >> idVer0;
                 loading >> idVer1;
-                vertices.at(idVer0-1)->addNeighbour(idVer1, vertices.at(idVer1-1)->x, vertices.at(idVer1-1)->y);/// to git
-                vertices.at(idVer1-1)->addNeighbour(idVer0, vertices.at(idVer0-1)->x, vertices.at(idVer0-1)->y);/// to git
+                vertices.at(idVer0-1)->addNeighbour(idVer1, vertices.at(idVer1-1)->getX(), vertices.at(idVer1-1)->getY());
+                vertices.at(idVer1-1)->addNeighbour(idVer0, vertices.at(idVer0-1)->getX(), vertices.at(idVer0-1)->getY());
                 edges.push_back(new Edge(id, vertices.at(idVer0-1), vertices.at(idVer1-1)));
 
-                for(int i=1; i<edgesNum; i++)
+                for(unsigned i=1; i<edgesNum; i++)
                 {
                     loading >> id;
                     loading >> idVer0;
                     loading >> idVer1;
-                    vertices.at(idVer0-1)->addNeighbour(idVer1, vertices.at(idVer1-1)->x, vertices.at(idVer1-1)->y);
-                    vertices.at(idVer1-1)->addNeighbour(idVer0, vertices.at(idVer0-1)->x, vertices.at(idVer0-1)->y);
+                    vertices.at(idVer0-1)->addNeighbour(idVer1, vertices.at(idVer1-1)->getX(), vertices.at(idVer1-1)->getY());
+                    vertices.at(idVer1-1)->addNeighbour(idVer0, vertices.at(idVer0-1)->getX(), vertices.at(idVer0-1)->getY());
                     edges.push_back(new Edge(id, vertices.at(idVer0-1), vertices.at(idVer1-1)));
                 }
             }
@@ -124,7 +124,7 @@ unsigned Instructions::primsAlgorithm(std::vector<Vertex*> vertices, std::vector
     Vertex* vertex = vertices.at(0);                                   ///Vertex startowy
     unsigned minScale[vertices.size()+1];                                  ///Wagi polaczen do danych wezlow
     bool checked[vertices.size()+1];
-    int newID = 0;
+    unsigned newID = 0;
     unsigned connections[vertices.size()+1][vertices.size()+1];                ///Lacza z wektora w formie tabeli
     unsigned cost = 0;
     unsigned iterators[MX][MX];
@@ -132,53 +132,53 @@ unsigned Instructions::primsAlgorithm(std::vector<Vertex*> vertices, std::vector
     unsigned num=0;
 
     minScale[0]=MX;
-    for(int i=1; i <=vertices.size(); i++)
+    for(unsigned i=1; i <=vertices.size(); i++)
     {
         minScale[i] = MX;
         checked[i] = false;
         which[i] = i;
         iterators[i][i] = 0;
 
-        for(int q=1; q <=vertices.size(); q++)                             ///Wartosc poczatkowa tablic
+        for(unsigned q=1; q <=vertices.size(); q++)                             ///Wartosc poczatkowa tablic
         {
             connections[i][q] = MX;
         }
         connections[i][i] = 0;
     }
 
-    checked[vertex->id] = true;                                     ///Wierzcho³ek startowy jest zbadany
-    minScale[vertex->id]=0;
+    checked[vertex->getID()] = true;                                     ///Wierzcho³ek startowy jest zbadany
+    minScale[vertex->getID()]=0;
 
-    for(int iter = 0; iter < edges.size(); iter++)      ///Tworzenie tablicy po³¹czeñ od konkretnych wêz³ów z wagami ³¹czy
+    for(unsigned iter = 0; iter < edges.size(); iter++)      ///Tworzenie tablicy po³¹czeñ od konkretnych wêz³ów z wagami ³¹czy
     {
-        connections[edges.at(iter)->idVer[0]][edges.at(iter)->idVer[1]] = edges.at(iter)->scale;
-        connections[edges.at(iter)->idVer[1]][edges.at(iter)->idVer[0]] = edges.at(iter)->scale;
-        iterators[edges.at(iter)->idVer[0]][edges.at(iter)->idVer[1]] = iter;   ///Iteratory ³acza dla odpowiednich wez³ow
-        iterators[edges.at(iter)->idVer[1]][edges.at(iter)->idVer[0]] = iter;   ///Iteratory ³acza dla odpowiednich wez³ow
+        connections[edges.at(iter)->getIDVer(0)][edges.at(iter)->getIDVer(1)] = edges.at(iter)->getScale();
+        connections[edges.at(iter)->getIDVer(1)][edges.at(iter)->getIDVer(0)] = edges.at(iter)->getScale();
+        iterators[edges.at(iter)->getIDVer(0)][edges.at(iter)->getIDVer(1)] = iter;   ///Iteratory ³acza dla odpowiednich wez³ow
+        iterators[edges.at(iter)->getIDVer(1)][edges.at(iter)->getIDVer(0)] = iter;   ///Iteratory ³acza dla odpowiednich wez³ow
     }
 
     while(num != vertices.size()-1)                                        ///Iteracja a¿ do ostatniego wierzcho³ka
     {
         num++;
-        for(int id=2; id <= vertices.size(); id++)                         ///Poszukiwany s¹siad o danym ID; Zaczynamy od ID=2 bo 1 zbadana
+        for(unsigned id=2; id <= vertices.size(); id++)                         ///Poszukiwany s¹siad o danym ID; Zaczynamy od ID=2 bo 1 zbadana
         {
-            for(int k=0; k < vertex->neighbours.size(); k++)         ///Szukamy tego ID w wêz³ach, które sa s¹siadami; k=0 bo wektor
+            for(int k=0; k < vertex->getNeighboursSize(); k++)         ///Szukamy tego ID w wêz³ach, które sa s¹siadami; k=0 bo wektor
             {
-                if(vertex->neighbours.at(k)->id == id);             /// Polaczenie istnieje
+                if(vertex->getNeighbourID(k) == id);             /// Polaczenie istnieje
                 {
                     if(!checked[id])                                    ///Gdy niechecked to dzia³aj dalej
                     {
-                        if(minScale[id] > connections[vertex->id][id])///Gdy waga minimalna po³¹czenia z wêz³em id jest wiêksza, od nowego po³¹czenia
+                        if(minScale[id] > connections[vertex->getID()][id])///Gdy waga minimalna po³¹czenia z wêz³em id jest wiêksza, od nowego po³¹czenia
                         {
-                            minScale[id] = connections[vertex->id][id];
-                            which[id] = vertex->id;                 ///Dla ktorego wierzcholka.id, polaczenie z ID jest najmniejsze, nadpisujemy
+                            minScale[id] = connections[vertex->getID()][id];
+                            which[id] = vertex->getID();                 ///Dla ktorego wierzcholka.id, polaczenie z ID jest najmniejsze, nadpisujemy
                         }
                     }
                 }
             }
         }
         newID=0;
-        for(int i=1; i<=vertices.size(); i++)                                  /// Szukamy sąsiada o najmniejszej wadze, by do niego przejsc
+        for(unsigned i=1; i<=vertices.size(); i++)                                  /// Szukamy sąsiada o najmniejszej wadze, by do niego przejsc
         {
             if(!checked[i])
             {
@@ -187,12 +187,12 @@ unsigned Instructions::primsAlgorithm(std::vector<Vertex*> vertices, std::vector
             }
         }
         vertex = vertices.at(newID-1);
-        checked[vertex->id] = true;                                  /// Zbadalismy juz kolejny wierzcholek, od wierzcholek.id bo juz zwiekszylismy n++
+        checked[vertex->getID()] = true;                                  /// Zbadalismy juz kolejny wierzcholek, od wierzcholek.id bo juz zwiekszylismy n++
     }
 
-    for(int id=2; id<=vertices.size(); id++)                                       ///Liczenie kosztu drzewa rozpinaj¹cego
+    for(unsigned id=2; id<=vertices.size(); id++)                                       ///Liczenie kosztu drzewa rozpinaj¹cego
     {
-        path.addEdge(ADD->id, vertices.at(which[id]-1), vertices.at(id-1), ADD->scale);      ///Zapis kolejnych przejsc algorithmu, id lacza, wezel_start, wezel_koniec
+        path.addEdge(ADD->getID(), vertices.at(which[id]-1), vertices.at(id-1), ADD->getScale());      ///Zapis kolejnych przejsc algorithmu, id lacza, wezel_start, wezel_koniec
         cost += minScale[id];
     }
 
@@ -214,54 +214,54 @@ unsigned Instructions::dijkstrasAlgorithm(std::vector<Vertex*> vertices, std::ve
     unsigned quantity = 0;
 
     minScale[0]=MX;
-    for(int i=1; i <=vertices.size(); i++)
+    for(unsigned i=1; i <=vertices.size(); i++)
     {
         minScale[i] = MX;
         marked[i] = false;
         which[i] = i;
         iterators[i][i] = MX;
 
-        for(int q=1; q <=vertices.size(); q++)                                       ///Wartosc poczatkowa tablic
+        for(unsigned q=1; q <=vertices.size(); q++)                                       ///Wartosc poczatkowa tablic
         {
             connections[i][q] = MX;
         }
         connections[i][i] = 0;
     }
 
-    marked[vertex->id] = true;                                  ///Wierzcho³ek startowy jest zbadany
-    minScale[vertex->id]=0;
+    marked[vertex->getID()] = true;                                  ///Wierzcho³ek startowy jest zbadany
+    minScale[vertex->getID()]=0;
 
 
     for(unsigned iter = 0; iter < edges.size(); iter++)      ///Tworzenie tablicy polaczen od konkretnych wezlow z wagami laczy
     {
-        connections[edges.at(iter)->idVer[0]][edges.at(iter)->idVer[1]] = edges.at(iter)->scale;        ///Lacza sa nieskierowane
-        connections[edges.at(iter)->idVer[1]][edges.at(iter)->idVer[0]] = edges.at(iter)->scale;
-        iterators[edges.at(iter)->idVer[0]][edges.at(iter)->idVer[1]] = iter;   ///Iteratory edges miedzy odpowiednimi wezlami
-        iterators[edges.at(iter)->idVer[1]][edges.at(iter)->idVer[0]] = iter;
+        connections[edges.at(iter)->getIDVer(0)][edges.at(iter)->getIDVer(1)] = edges.at(iter)->getScale();        ///Lacza sa nieskierowane
+        connections[edges.at(iter)->getIDVer(1)][edges.at(iter)->getIDVer(0)] = edges.at(iter)->getScale();
+        iterators[edges.at(iter)->getIDVer(0)][edges.at(iter)->getIDVer(1)] = iter;   ///Iteratory edges miedzy odpowiednimi wezlami
+        iterators[edges.at(iter)->getIDVer(1)][edges.at(iter)->getIDVer(0)] = iter;
     }
 
-    while(vertex->id != idFinish)             ///Iteracja az do docelowego wierzcholka
+    while(vertex->getID() != idFinish)             ///Iteracja az do docelowego wierzcholka
     {
         quantity++;
-        for(int id=1; id <= vertices.size(); id++)                         ///Poszukiwany sasiad o danym ID
+        for(unsigned id=1; id <= vertices.size(); id++)                         ///Poszukiwany sasiad o danym ID
         {
-            for(int k=0; k < vertex->neighbours.size(); k++)         ///Szukamy tego ID w wezlach, które sa sasiadami; k=0 bo wektor
+            for(int k=0; k < vertex->getNeighboursSize(); k++)         ///Szukamy tego ID w wezlach, które sa sasiadami; k=0 bo wektor
             {
-                if(vertex->neighbours.at(k)->id == id);             /// Polaczenie istnieje
+                if(vertex->getNeighbourID(k) == id);             /// Polaczenie istnieje
                 {
                     if(!marked[id])                                 ///Gdy niechecked to dzialaj dalej
                     {
-                        if(minScale[id] > minScale[vertex->id]+connections[vertex->id][id])   ///Gdy poprzednio zapisana waga jest wieksza od obecnie rozpatrywanej sciezki
+                        if(minScale[id] > minScale[vertex->getID()]+connections[vertex->getID()][id])   ///Gdy poprzednio zapisana waga jest wieksza od obecnie rozpatrywanej sciezki
                         {
-                            minScale[id] = minScale[vertex->id]+connections[vertex->id][id];
-                            which[id] = vertex->id;          ///Dla ktorego wierzcholek.id , polaczenie z ID jest najmniejsze, nadpisujemy
+                            minScale[id] = minScale[vertex->getID()]+connections[vertex->getID()][id];
+                            which[id] = vertex->getID();          ///Dla ktorego wierzcholek.id , polaczenie z ID jest najmniejsze, nadpisujemy
                         }
                     }
                 }
             }
         }
         newID = 0;
-        for(int i=1; i<=vertices.size(); i++)                               /// Szukamy sąsiada o najmniejszej wadze, by do niego przejsc
+        for(unsigned i=1; i<=vertices.size(); i++)                               /// Szukamy sąsiada o najmniejszej wadze, by do niego przejsc
         {
             if(i == idFinish)
             {
@@ -275,16 +275,16 @@ unsigned Instructions::dijkstrasAlgorithm(std::vector<Vertex*> vertices, std::ve
             }
         }
         vertex = vertices.at(newID-1);
-        marked[vertex->id] = true;                          /// Zbadalismy juz kolejny wierzcholek, od wierzcholek.id bo juz zwiekszylismy nowe_id++
+        marked[vertex->getID()] = true;                          /// Zbadalismy juz kolejny wierzcholek, od wierzcholek.id bo juz zwiekszylismy nowe_id++
     }
 
-    cost = minScale[vertex->id];
+    cost = minScale[vertex->getID()];
 
-    unsigned id = vertex->id;
+    unsigned id = vertex->getID();
 
     while(id != idStart)                                                  ///Tworzenie sciezki
     {
-        path.addEdge(ADD->id, vertices.at(which[id]-1), vertices.at(id-1), ADD->scale);      ///Zapis kolejnych przejsc algorithmu, id, wezel_start, wezel_koniec
+        path.addEdge(ADD->getID(), vertices.at(which[id]-1), vertices.at(id-1), ADD->getScale());      ///Zapis kolejnych przejsc algorithmu, id, wezel_start, wezel_koniec
         id = which[id];
     }
 
@@ -308,12 +308,12 @@ void Instructions::floydsAlgorithm(std::vector<Vertex*> vertices, std::vector<Ed
 
     minScale[0]=MX;
 
-    for(int i=1; i <=vertices.size(); i++)                             ///Zerowanie polaczen i iteratorow
+    for(unsigned i=1; i <=vertices.size(); i++)                             ///Zerowanie polaczen i iteratorow
     {
         connections[i][i] = 0;
         iterators[i][i] = 0;
 
-        for(int q=1; q <=vertices.size(); q++)                         ///Wartosc poczatkowa tablic
+        for(unsigned q=1; q <=vertices.size(); q++)                         ///Wartosc poczatkowa tablic
         {
             connections[i][q] = MX;
         }
@@ -321,51 +321,51 @@ void Instructions::floydsAlgorithm(std::vector<Vertex*> vertices, std::vector<Ed
 
     for(unsigned iter = 0; iter < edges.size(); iter++)      ///Tworzenie tablicy polaczen od konkretnych wezlow z wagami laczy
     {
-        connections[edges.at(iter)->idVer[0]][edges.at(iter)->idVer[1]] = edges.at(iter)->scale;        ///Lacza sa skierowane
-        iterators[edges.at(iter)->idVer[0]][edges.at(iter)->idVer[1]] = iter;   ///Iteratory edges miedzy odpowiednimi wezlami
+        connections[edges.at(iter)->getIDVer(0)][edges.at(iter)->getIDVer(1)] = edges.at(iter)->getScale();        ///Lacza sa skierowane
+        iterators[edges.at(iter)->getIDVer(0)][edges.at(iter)->getIDVer(1)] = iter;   ///Iteratory edges miedzy odpowiednimi wezlami
     }
 
     for(unsigned iteration=0; iteration < floydsEdges.size(); iteration++)
     {
-        vertex = vertices.at(floydsEdges.at(iteration)->idVer[0]-1);                          ///Wezel startowy, zaczynamy od elementu o id-1, bo tablica
+        vertex = vertices.at(floydsEdges.at(iteration)->getIDVer(0)-1);                          ///Wezel startowy, zaczynamy od elementu o id-1, bo tablica
         newID = 0;
         cost = 0;
         quantity = 0;
 
-        for(int i=1; i <=vertices.size(); i++)
+        for(unsigned i=1; i <=vertices.size(); i++)
         {
             minScale[i] = MX;
             marked[i] = false;
             which[i] = i;
         }
 
-        marked[vertex->id] = true;                                  ///Wierzcholek startowy jest zbadany
-        minScale[vertex->id]=0;
+        marked[vertex->getID()] = true;                                  ///Wierzcholek startowy jest zbadany
+        minScale[vertex->getID()]=0;
 
-        while(vertex->id != floydsEdges.at(iteration)->idVer[1])             ///Iteracja az do docelowego wierzcholka
+        while(vertex->getID() != floydsEdges.at(iteration)->getIDVer(1))             ///Iteracja az do docelowego wierzcholka
         {
             quantity++;
-            for(int id=1; id <= vertices.size(); id++)                         ///Poszukiwany sasiad o danym ID
+            for(unsigned id=1; id <= vertices.size(); id++)                         ///Poszukiwany sasiad o danym ID
             {
-                for(int k=0; k < vertex->neighbours.size(); k++)         ///Szukamy tego ID w wezlach, które sa sasiadami; k=0 bo wektor
+                for(int k=0; k < vertex->getNeighboursSize(); k++)         ///Szukamy tego ID w wezlach, które sa sasiadami; k=0 bo wektor
                 {
-                    if(vertex->neighbours.at(k)->id == id && connections[vertex->id][id] != MX)             /// Polaczenie istnieje
+                    if(vertex->getNeighbourID(k) == id && connections[vertex->getID()][id] != MX)             /// Polaczenie istnieje
                     {
                         if(!marked[id])                                 ///Gdy niechecked to dzialaj dalej
                         {
-                            if(minScale[id] > minScale[vertex->id]+connections[vertex->id][id])   ///Gdy poprzednio zapisana waga jest wieksza od obecnie rozpatrywanej sciezki
+                            if(minScale[id] > minScale[vertex->getID()]+connections[vertex->getID()][id])   ///Gdy poprzednio zapisana waga jest wieksza od obecnie rozpatrywanej sciezki
                             {
-                                minScale[id] = minScale[vertex->id]+connections[vertex->id][id];
-                                which[id] = vertex->id;          ///Dla ktorego wierzcholek.id , polaczenie z ID jest najmniejsze, nadpisujemy
+                                minScale[id] = minScale[vertex->getID()]+connections[vertex->getID()][id];
+                                which[id] = vertex->getID();          ///Dla ktorego wierzcholek.id , polaczenie z ID jest najmniejsze, nadpisujemy
                             }
                         }
                     }
                 }
             }
             newID = 0;
-            for(int i=1; i<=vertices.size(); i++)                               /// Szukamy sąsiada o najmniejszej wadze, by do niego przejsc
+            for(unsigned i=1; i<=vertices.size(); i++)                               /// Szukamy sąsiada o najmniejszej wadze, by do niego przejsc
             {
-                if(i == floydsEdges.at(iteration)->idVer[1])
+                if(i == floydsEdges.at(iteration)->getIDVer(1))
                 {
                     if(quantity == vertices.size()-1)
                         newID=i;
@@ -377,17 +377,17 @@ void Instructions::floydsAlgorithm(std::vector<Vertex*> vertices, std::vector<Ed
                 }
             }
             vertex = vertices.at(newID-1);
-            marked[vertex->id] = true;                          /// Zbadalismy juz kolejny wierzcholek, od wierzcholek.id bo juz zwiekszylismy nowe_id++
+            marked[vertex->getID()] = true;                          /// Zbadalismy juz kolejny wierzcholek, od wierzcholek.id bo juz zwiekszylismy nowe_id++
         }
 
-        cost = minScale[vertex->id];
+        cost = minScale[vertex->getID()];
 
-        unsigned id = vertex->id;
+        unsigned id = vertex->getID();
 
         path = new Path();
-        while(id != floydsEdges.at(iteration)->idVer[0])                                                  ///Tworzenie sciezki
+        while(id != floydsEdges.at(iteration)->getIDVer(0))                                                  ///Tworzenie sciezki
         {
-            path->addEdge(ADD->id, vertices.at(which[id]-1), vertices.at(id-1), ADD->scale);      ///Zapis kolejnych przejsc algorithmu, id, wezel_start, wezel_koniec
+            path->addEdge(ADD->getID(), vertices.at(which[id]-1), vertices.at(id-1), ADD->getScale());      ///Zapis kolejnych przejsc algorithmu, id, wezel_start, wezel_koniec
             id = which[id];
         }
         floydsPaths.push_back(path);

@@ -59,6 +59,7 @@ char SFMLtoASCII(sf::Keyboard::Key code){
     else if(code == sf::Keyboard::Numpad7) return '7';
     else if(code == sf::Keyboard::Numpad8) return '8';
     else if(code == sf::Keyboard::Numpad9) return '9';
+    return '\0';
 }
 
 ///Writing file's name and closing executable program
@@ -78,7 +79,7 @@ void Graphs::events(sf::Window &window, Instructions &instructions, std::vector<
                         try{
                             vertices.clear();
                             edges.clear();
-                            path.path.clear();
+                            path.clearPath();
                             instructions.read(vertices, edges, idStart, idFinish, algorithm, floydsEdges, loaded);
                             if(algorithm == "PATH")
                                 cost = instructions.dijkstrasAlgorithm(vertices, edges, path, idStart, idFinish);
@@ -86,6 +87,8 @@ void Graphs::events(sf::Window &window, Instructions &instructions, std::vector<
                                 cost = instructions.primsAlgorithm(vertices, edges, path);
                             else if(algorithm == "FLOYD")
                                 instructions.floydsAlgorithm(vertices, edges, floydsEdges, floydsPaths, costs);
+                            //else if(algorithm == "MASTS")
+                                //instructions.mastsAlgorithm();
                         }
                         catch(...){
                             std::string msg = "Fatal error while loading from file " + instructions.file + " No file or directory";
@@ -165,14 +168,14 @@ void Graphs::draw(sf::RenderWindow &window, Instructions &instructions, const st
     if(pause==20)
         pause=0;
 
-    window.clear(sf::Color(8,8,16));                                ///Okno ma pewien wyznaczony kolor
+    window.clear(BACKGROUND);                                ///Okno ma pewien wyznaczony kolor
 
-    Graphs::write(window, ">", (1366 / 2) - 598, 65, sf::Color::White, 32);
+    Graphs::write(window, ">", (WIDTH / 2) - 598, 65, sf::Color::White, 32);
     if(!frame)
-        Graphs::write(window, "_", (1366 / 2) - 583, 65, sf::Color::White, 32);
-    Graphs::write(window, instructions.file.c_str() , (1366 / 2) - 563, 65, sf::Color::White, 32); ///Wyswietlanie wpisywanego tekstu
+        Graphs::write(window, "_", (WIDTH / 2) - 583, 65, sf::Color::White, 32);
+    Graphs::write(window, instructions.file.c_str() , (WIDTH / 2) - 563, 65, sf::Color::White, 32); ///Wyswietlanie wpisywanego tekstu
 
-    Graphs::write(window, "> "+algorithm,(1366 / 2) - 578, 100);  ///Wyswietlanie nazwy algorytmu
+    Graphs::write(window, "> "+algorithm,(WIDTH / 2) - 578, 100);  ///Wyswietlanie nazwy algorytmu
 
     if(algorithm == "FLOYD")
         cost = costs.at(displayed);
@@ -180,62 +183,60 @@ void Graphs::draw(sf::RenderWindow &window, Instructions &instructions, const st
     a << cost;
     std::string allCosts = a.str();
     std::string text = "Koszt grafu ";
-    Graphs::write(window, "> "+text+allCosts,(1366 / 2) - 578, 130);      ///Wyswietlanie kosztu grafu
+    Graphs::write(window, "> "+text+allCosts,(WIDTH / 2) - 578, 130);      ///Wyswietlanie kosztu grafu
 
     if(algorithm == "FLOYD")
     {
         std::stringstream a;
-        a << floydsEdges.at(displayed)->idVer[0];
+        a << floydsEdges.at(displayed)->getIDVer(0);
         std::string id = a.str();
         std::stringstream b;
-        b << floydsEdges.at(displayed)->idVer[1];
+        b << floydsEdges.at(displayed)->getIDVer(1);
         std::string id2 = b.str();
-        Graphs::write(window, "> "+id+" "+id2,(1366 / 2) - 578, 160);
+        Graphs::write(window, "> "+id+" "+id2,(WIDTH / 2) - 578, 160);
     }
 
     if(loaded)
     {
-        for(int i = 0; i< vertices.size(); i++)                        ///Rysowanie wierzcholkow
+        for(unsigned i = 0; i< vertices.size(); i++)                        ///Rysowanie wierzcholkow
         {
-            window.draw(vertices.at(i)->circle);
+            window.draw(vertices.at(i)->getCircle());
             std::stringstream a;
             a << (i+1);
             std::string s = a.str();
-            Graphs::write(window, s, vertices.at(i)->x*8+190, vertices.at(i)->y*8-20);
+            Graphs::write(window, s, vertices.at(i)->getX()*8+190, vertices.at(i)->getY()*8-20);
         }
 
-        for(int i = 0; i< edges.size(); i++)                        ///Rysowanie polaczen
+        for(unsigned i = 0; i< edges.size(); i++)                        ///Rysowanie polaczen
         {
-            window.draw(edges.at(i)->line);
+            window.draw(edges.at(i)->getLine());
             std::stringstream a;
-            a << edges.at(i)->scale;
+            a << edges.at(i)->getScale();
             std::string s = a.str();
             Graphs::write(window, s,
-                         (edges.at(i)->vertices[0]->x +edges.at(i)->vertices[1]->x)*4+200,
-                         (edges.at(i)->vertices[0]->y +edges.at(i)->vertices[1]->y)*4-8, sf::Color::White, 14);
+                         (edges.at(i)->getVertexX(0)+edges.at(i)->getVertexX(1))*4+200,
+                         (edges.at(i)->getVertexY(0)+edges.at(i)->getVertexY(1))*4-8, sf::Color::White, 14);
         }
 
         if(algorithm == "MST" || algorithm == "PATH")
-            for(int i = 0; i< path.path.size(); i++)              ///Rysowanie sciezki dla MST i SCIEZKA
+            for(unsigned i = 0; i< path.getPathSize(); i++)              ///Rysowanie sciezki dla MST i SCIEZKA
             {
-                path.path.at(i)->line[0].color = sf::Color(154,68,234);
-                path.path.at(i)->line[1].color = sf::Color(4,249,160);
-                path.path.at(i)->vertices[0]->circle.setOutlineColor(sf::Color(154,68,234));
-                path.path.at(i)->vertices[1]->circle.setOutlineColor(sf::Color(154,68,234));
-                window.draw(path.path.at(i)->line);
-                window.draw(path.path.at(i)->vertices[0]->circle);
-                window.draw(path.path.at(i)->vertices[1]->circle);
+                path.changeEdgeColor(i, sf::Color(154,68,234), sf::Color(4,249,160));
+                path.changeVertexColor(i, 0, sf::Color(154,68,234));
+                path.changeVertexColor(i, 1, sf::Color(154,68,234));
+                window.draw(path.getLine(i));
+                window.draw(path.getVertexCircle(i, 0));
+                window.draw(path.getVertexCircle(i, 1));
             }
         else if(algorithm == "FLOYD")
-            for(int i = 0; i<floydsPaths.at(displayed)->path.size(); i++) ///Rysowanie sciezki dla FLOYD
+            for(unsigned i = 0; i<floydsPaths.at(displayed)->getPathSize(); i++) ///Rysowanie sciezki dla FLOYD
             {
-                floydsPaths.at(displayed)->path.at(i)->line[0].color = sf::Color(154,68,234);
-                floydsPaths.at(displayed)->path.at(i)->line[1].color = sf::Color(4,249,160);
-                floydsPaths.at(displayed)->path.at(i)->vertices[0]->circle.setOutlineColor(sf::Color(154,68,234));
-                floydsPaths.at(displayed)->path.at(i)->vertices[1]->circle.setOutlineColor(sf::Color(154,68,234));
-                window.draw(floydsPaths.at(displayed)->path.at(i)->line);
-                window.draw(floydsPaths.at(displayed)->path.at(i)->vertices[0]->circle);
-                window.draw(floydsPaths.at(displayed)->path.at(i)->vertices[1]->circle);
+                floydsPaths.at(displayed)->changeEdgeColor(i, sf::Color(154,68,234), sf::Color(4,249,160));
+                floydsPaths.at(displayed)->changeVertexColor(i, 0, sf::Color(154,68,234));
+                floydsPaths.at(displayed)->changeVertexColor(i, 1, sf::Color(154,68,234));
+                window.draw(floydsPaths.at(displayed)->getLine(i));
+                window.draw(floydsPaths.at(displayed)->getVertexCircle(i, 0));
+                window.draw(floydsPaths.at(displayed)->getVertexCircle(i, 1));
             }
 
         ///Tutaj dopisywac nowe window.draw();

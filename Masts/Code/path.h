@@ -11,10 +11,15 @@
 #include "edge.h"
 
 class Path{
-    public:
+    private:
         std::vector<Edge*> path;
 
+    public:
         Path()
+        {
+        }
+
+        ~Path()
         {
         }
 
@@ -25,7 +30,33 @@ class Path{
 
         void clean()
         {
-            for(int i=0; i<path.size(); i++)
+            for(unsigned i=0; i<path.size(); i++)
                 path.at(i)->zero();
         }
+
+        Edge* getPath(unsigned index){ return path.at(index); }
+
+        void clearPath(){ path.clear(); }
+
+        unsigned getPathSize(){ return path.size(); }
+
+/// /// /// /// /// /// /// /// Functions other than for Path
+/// /// Edge functions
+///
+        void changeEdgeColor(unsigned index, sf::Color color){ path.at(index)->changeLineColor(color); }
+///
+        void changeEdgeColor(unsigned index, sf::Color color, sf::Color color2){ path.at(index)->changeLineColor(color, color2); }
+///
+        sf::VertexArray getLine(unsigned index){ return path.at(index)->getLine(); }
+///
+/// ###
+/// /// Vertex functions
+///
+        void changeVertexColor(unsigned index, unsigned idVer, sf::Color color){ path.at(index)->changeVertexColor(idVer, color); }
+///
+        sf::CircleShape getVertexCircle(unsigned index, unsigned idVer){ return path.at(index)->getVertexCircle(idVer); }
+///
+/// ###
+/// /// /// /// /// /// ###
+
 };

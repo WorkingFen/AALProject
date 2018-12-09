@@ -3,20 +3,20 @@
 # Number of vertices. Vertices has been numbered from 1
 VERTICES = 7
 # Every vertex has three or four atributes (ID, X coordinate, Y coordinate, Distance[to next vertex])
-# 1 10 50 0
+# 1 20 50 0
 # 2 30 56 0
 # 3 45 32 1
 # 4 90 28 0
 # 5 20 22 0
 # 6 26 89 1
 # 7 90 63 0
-1 10 50
-2 30 56
-3 45 32
-4 90 28
-5 20 22
-6 26 89
-7 90 63
+1 10 30
+2 15 50
+3 30 60
+4 55 55
+5 60 25
+6 45 15
+7 20 15
 # Number of edges
 EDGES = 7
 # Every edge has three atributes (ID, first vertex, last vertex)
