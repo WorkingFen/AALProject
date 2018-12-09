@@ -7,7 +7,6 @@
 */
 #pragma once
 
-#include <iostream>
 #include <ctime>
 #include <math.h>
 #include "vertex.h"
@@ -26,9 +25,8 @@ class Edge{
             vertices[1] = nullptr;
         }
 
-        Edge(unsigned id, Vertex* start, Vertex* fin)
+        Edge(unsigned id, Vertex* start, Vertex* fin): id(id)
         {
-            this->id = id;
             vertices[0] = start;
             vertices[1] = fin;
             scale = (std::rand() % 50) + 1;
@@ -38,12 +36,10 @@ class Edge{
             changeLineColor(sf::Color::White);
         }
 
-        Edge(unsigned id, Vertex* start, Vertex* fin, unsigned scale)
+        Edge(unsigned id, Vertex* start, Vertex* fin, unsigned scale): id(id), scale(scale)
         {
-            this->id = id;
             vertices[0] = start;
             vertices[1] = fin;
-            this->scale = scale;
             line = sf::VertexArray(sf::Lines, 2);
             line[0].position = sf::Vector2f(start->getX()*8 + 210, start->getY()*8+10);
             line[1].position = sf::Vector2f(fin->getX()*8 + 210, fin->getY()*8+10);

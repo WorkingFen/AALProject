@@ -1,32 +1,18 @@
 /**
-* Name: instructions.h
-* Purpose: Declaration of instructions
+* Name: algorithms.h
+* Purpose: Declaration of algorithms
 *
 * @version 0.1 06/12/2018
 * @author Piotr Zawadka
 */
 #pragma once
 
-#include <iostream>
-#include <fstream>
-#include <vector>
 #include <string>
 #include <cstdlib>
-#include "edge.h"
-#include "vertex.h"
 #include "path.h"
 
-#define MX 500
-
-class Instructions{
-    private:
-        std::ifstream loading;
-
+class Algorithms{
     public:
-        std::string file;
-        void read(std::vector<Vertex*> &vertices, std::vector<Edge*> &edges, unsigned &idStart,
-                    unsigned &idFinish, std::string &algorithm, std::vector<Edge*> &floydsEdges, bool &loaded);
-
         unsigned primsAlgorithm(std::vector<Vertex*> vertices, std::vector<Edge*> edges, Path &path);
 
         unsigned dijkstrasAlgorithm(std::vector<Vertex*> vertices, std::vector<Edge*> edges, Path &path,

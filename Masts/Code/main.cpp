@@ -6,12 +6,8 @@
 * @author Piotr Zawadka
 */
 
-#include <iostream>
-#include <ctime>
 #include <cmath>
-#include <SFML/Graphics.hpp>
-#include "graphs.h"
-#include "instructions.h"
+#include "interface.h"
 
 int main()
 {
@@ -33,19 +29,20 @@ int main()
 
     bool loaded = false;
 
-    Instructions instructions;
+    Algorithms algorithms;
+    Files files;
     Path path;
 
     srand(time(NULL));
 
-    sf::RenderWindow window(sf::VideoMode(1366, 768), "Masts");
+    sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Masts");
     window.setFramerateLimit(60);
 
     while (window.isOpen())
     {
-        Graphs::events(window, instructions, vertices, edges, idStart, idFinish, algorithm,
+        Interface::events(window, algorithms, files, vertices, edges, idStart, idFinish, algorithm,
                         floydsEdges, loaded, path, cost, displayed, floydsPaths, costs);
-        Graphs::draw(window, instructions, algorithm, frame, pause, loaded, vertices, edges,
+        Interface::draw(window, files, algorithm, frame, pause, loaded, vertices, edges,
                         floydsEdges, path, cost, displayed, floydsPaths, costs);
     }
 }

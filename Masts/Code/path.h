@@ -7,7 +7,6 @@
 */
 #pragma once
 
-#include <iostream>
 #include "edge.h"
 
 class Path{

@@ -22,15 +22,12 @@ class Vertex{
         sf::CircleShape circle;
 
     public:
-        Vertex(): id(0), x(0), y(0)
+        Vertex(): id(0), x(0), y(0), distance(0)
         {
         }
 
-        Vertex(unsigned id, double x, double y): distance(0)
+        Vertex(unsigned id, double x, double y): id(id), x(x), y(y), distance(0)
         {
-            this->id = id;
-            this->x = x;
-            this->y = y;
             circle.setRadius(10);
             circle.setPosition(x*8+200,y*8);
             circle.setOutlineThickness(2);
@@ -38,12 +35,8 @@ class Vertex{
             circle.setOutlineColor(sf::Color::White);
         }
 
-        Vertex(unsigned id, double x, double y, unsigned distance)
+        Vertex(unsigned id, double x, double y, unsigned distance): id(id), x(x), y(y), distance(distance)
         {
-            this->id = id;
-            this->x = x;
-            this->y = y;
-            this->distance = distance;
             circle.setRadius(10);
             circle.setPosition(x*8+200,y*8);
             circle.setOutlineThickness(2);

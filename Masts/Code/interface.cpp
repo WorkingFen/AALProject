@@ -1,17 +1,17 @@
 /**
-* Name: graphs.cpp
-* Purpose: Implementation of namespace Graphs
+* Name: interface.cpp
+* Purpose: Implementation of namespace Interface
 *
 * @version 0.1 06/12/2018
 * @author Piotr Zawadka
 */
-#include <fstream>
+
 #include <sstream>
 #include <windows.h>
-#include "graphs.h"
+#include "interface.h"
 
 ///SFML doesn't have proper transformation to ASCII, so I had to create my own
-char SFMLtoASCII(sf::Keyboard::Key code){
+char Interface::SFMLtoASCII(sf::Keyboard::Key code){
     if(code == sf::Keyboard::A) return 'A';
     else if(code == sf::Keyboard::B) return 'B';
     else if(code == sf::Keyboard::C) return 'C';
@@ -63,39 +63,39 @@ char SFMLtoASCII(sf::Keyboard::Key code){
 }
 
 ///Writing file's name and closing executable program
-void Graphs::events(sf::Window &window, Instructions &instructions, std::vector<Vertex*> &vertices, std::vector<Edge*> &edges,
+void Interface::events(sf::Window &window, Algorithms &algorithms, Files &files, std::vector<Vertex*> &vertices, std::vector<Edge*> &edges,
                            unsigned &idStart, unsigned &idFinish, std::string &algorithm, std::vector<Edge*> &floydsEdges,
                            bool &loaded, Path &path, unsigned &cost, unsigned &displayed, std::vector<Path*> &floydsPaths,
                            std::vector<unsigned> &costs){
     sf::Event event;
     while (window.pollEvent(event)){
         switch (event.type){
-            case sf::Event::Closed:                     ///Event::Closed
+            case sf::Event::Closed:                                                                                                     ///Event::Closed
                 window.close();
                 break;
-            case sf::Event::KeyReleased:                ///Event::KeyReleased
+            case sf::Event::KeyReleased:                                                                                                ///Event::KeyReleased
                 switch(event.key.code){
                     case sf::Keyboard::Return:
                         try{
                             vertices.clear();
                             edges.clear();
                             path.clearPath();
-                            instructions.read(vertices, edges, idStart, idFinish, algorithm, floydsEdges, loaded);
+                            files.read(vertices, edges, idStart, idFinish, algorithm, floydsEdges, loaded);
                             if(algorithm == "PATH")
-                                cost = instructions.dijkstrasAlgorithm(vertices, edges, path, idStart, idFinish);
+                                cost = algorithms.dijkstrasAlgorithm(vertices, edges, path, idStart, idFinish);
                             else if(algorithm == "MST")
-                                cost = instructions.primsAlgorithm(vertices, edges, path);
+                                cost = algorithms.primsAlgorithm(vertices, edges, path);
                             else if(algorithm == "FLOYD")
-                                instructions.floydsAlgorithm(vertices, edges, floydsEdges, floydsPaths, costs);
+                                algorithms.floydsAlgorithm(vertices, edges, floydsEdges, floydsPaths, costs);
                             //else if(algorithm == "MASTS")
-                                //instructions.mastsAlgorithm();
+                                //algorithms.mastsAlgorithm();
                         }
                         catch(...){
-                            std::string msg = "Fatal error while loading from file " + instructions.file + " No file or directory";
+                            std::string msg = "Fatal error while loading from file " + files.getFile() + " No file or directory";
                             MessageBox(NULL, msg.c_str(), NULL, MB_OK | MB_ICONEXCLAMATION);
                             exit(20);
                         }
-                        instructions.file = "";
+                        files.setFile("");
                         break;
                     case sf::Keyboard::Left:
                         if(algorithm == "FLOYD")
@@ -116,13 +116,13 @@ void Graphs::events(sf::Window &window, Instructions &instructions, std::vector<
                         }
                         break;
                     case sf::Keyboard::BackSpace:
-                        if(instructions.file != "") instructions.file.pop_back();
+                        if(files.getFile() != "") files.popFile();
                         break;
                     default:
-                        instructions.file.push_back(SFMLtoASCII(event.key.code));
+                        files.pushFile(SFMLtoASCII(event.key.code));
                         break;
                 }
-            case sf::Event::MouseButtonPressed:         ///Event::MouseButtonPressed
+            case sf::Event::MouseButtonPressed:                                                                                         ///Event::MouseButtonPressed
                 switch (event.mouseButton.button){
                     case sf::Mouse::Middle:
                         window.close();
@@ -138,7 +138,7 @@ void Graphs::events(sf::Window &window, Instructions &instructions, std::vector<
 } //Function
 
 ///Writing function
-void Graphs::write(sf::RenderWindow &window, const std::string msg, const unsigned x, const unsigned y,
+void Interface::write(sf::RenderWindow &window, const std::string msg, const unsigned x, const unsigned y,
                   sf::Color color, unsigned size){
     sf::Font font;
     font.loadFromFile("Resources/MunroNarrow.ttf");
@@ -154,12 +154,12 @@ void Graphs::write(sf::RenderWindow &window, const std::string msg, const unsign
 }
 
 ///Drawing function
-void Graphs::draw(sf::RenderWindow &window, Instructions &instructions, const std::string algorithm,
+void Interface::draw(sf::RenderWindow &window, Files &files, const std::string algorithm,
                    int &frame, int &pause, bool loaded, std::vector<Vertex*> vertices, std::vector<Edge*> edges,
                    std::vector<Edge*> floydsEdges, Path path, unsigned &cost, unsigned displayed,
                    std::vector<Path*> floydsPaths, std::vector<unsigned> costs)
 {
-    if(!pause)                                                       ///Mrugajaca strzalka
+    if(!pause)                                                                                                                          ///Mrugajaca strzalka
         frame++;
     if(frame==20)
         frame=0;
@@ -168,14 +168,14 @@ void Graphs::draw(sf::RenderWindow &window, Instructions &instructions, const st
     if(pause==20)
         pause=0;
 
-    window.clear(BACKGROUND);                                ///Okno ma pewien wyznaczony kolor
+    window.clear(BACKGROUND);                                                                                                           ///Okno ma pewien wyznaczony kolor
 
-    Graphs::write(window, ">", (WIDTH / 2) - 598, 65, sf::Color::White, 32);
+    Interface::write(window, ">", (WIDTH / 2) - 598, 65, sf::Color::White, 32);
     if(!frame)
-        Graphs::write(window, "_", (WIDTH / 2) - 583, 65, sf::Color::White, 32);
-    Graphs::write(window, instructions.file.c_str() , (WIDTH / 2) - 563, 65, sf::Color::White, 32); ///Wyswietlanie wpisywanego tekstu
+        Interface::write(window, "_", (WIDTH / 2) - 583, 65, sf::Color::White, 32);
+    Interface::write(window, files.getFile().c_str() , (WIDTH / 2) - 563, 65, sf::Color::White, 32);                                     ///Wyswietlanie wpisywanego tekstu
 
-    Graphs::write(window, "> "+algorithm,(WIDTH / 2) - 578, 100);  ///Wyswietlanie nazwy algorytmu
+    Interface::write(window, "> "+algorithm,(WIDTH / 2) - 578, 100);                                                                       ///Wyswietlanie nazwy algorytmu
 
     if(algorithm == "FLOYD")
         cost = costs.at(displayed);
@@ -183,7 +183,7 @@ void Graphs::draw(sf::RenderWindow &window, Instructions &instructions, const st
     a << cost;
     std::string allCosts = a.str();
     std::string text = "Koszt grafu ";
-    Graphs::write(window, "> "+text+allCosts,(WIDTH / 2) - 578, 130);      ///Wyswietlanie kosztu grafu
+    Interface::write(window, "> "+text+allCosts,(WIDTH / 2) - 578, 130);                                                                   ///Wyswietlanie kosztu grafu
 
     if(algorithm == "FLOYD")
     {
@@ -193,33 +193,33 @@ void Graphs::draw(sf::RenderWindow &window, Instructions &instructions, const st
         std::stringstream b;
         b << floydsEdges.at(displayed)->getIDVer(1);
         std::string id2 = b.str();
-        Graphs::write(window, "> "+id+" "+id2,(WIDTH / 2) - 578, 160);
+        Interface::write(window, "> "+id+" "+id2,(WIDTH / 2) - 578, 160);
     }
 
     if(loaded)
     {
-        for(unsigned i = 0; i< vertices.size(); i++)                        ///Rysowanie wierzcholkow
+        for(unsigned i = 0; i< vertices.size(); i++)                                                                                    ///Rysowanie wierzcholkow
         {
             window.draw(vertices.at(i)->getCircle());
             std::stringstream a;
             a << (i+1);
             std::string s = a.str();
-            Graphs::write(window, s, vertices.at(i)->getX()*8+190, vertices.at(i)->getY()*8-20);
+            Interface::write(window, s, vertices.at(i)->getX()*8+190, vertices.at(i)->getY()*8-20);
         }
 
-        for(unsigned i = 0; i< edges.size(); i++)                        ///Rysowanie polaczen
+        for(unsigned i = 0; i< edges.size(); i++)                                                                                       ///Rysowanie polaczen
         {
             window.draw(edges.at(i)->getLine());
             std::stringstream a;
             a << edges.at(i)->getScale();
             std::string s = a.str();
-            Graphs::write(window, s,
+            Interface::write(window, s,
                          (edges.at(i)->getVertexX(0)+edges.at(i)->getVertexX(1))*4+200,
                          (edges.at(i)->getVertexY(0)+edges.at(i)->getVertexY(1))*4-8, sf::Color::White, 14);
         }
 
         if(algorithm == "MST" || algorithm == "PATH")
-            for(unsigned i = 0; i< path.getPathSize(); i++)              ///Rysowanie sciezki dla MST i SCIEZKA
+            for(unsigned i = 0; i< path.getPathSize(); i++)                                                                             ///Rysowanie sciezki dla MST i SCIEZKA
             {
                 path.changeEdgeColor(i, sf::Color(154,68,234), sf::Color(4,249,160));
                 path.changeVertexColor(i, 0, sf::Color(154,68,234));
@@ -229,7 +229,7 @@ void Graphs::draw(sf::RenderWindow &window, Instructions &instructions, const st
                 window.draw(path.getVertexCircle(i, 1));
             }
         else if(algorithm == "FLOYD")
-            for(unsigned i = 0; i<floydsPaths.at(displayed)->getPathSize(); i++) ///Rysowanie sciezki dla FLOYD
+            for(unsigned i = 0; i<floydsPaths.at(displayed)->getPathSize(); i++)                                                        ///Rysowanie sciezki dla FLOYD
             {
                 floydsPaths.at(displayed)->changeEdgeColor(i, sf::Color(154,68,234), sf::Color(4,249,160));
                 floydsPaths.at(displayed)->changeVertexColor(i, 0, sf::Color(154,68,234));
