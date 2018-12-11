@@ -66,7 +66,7 @@ char Interface::SFMLtoASCII(sf::Keyboard::Key code){
 void Interface::events(sf::Window &window, Algorithms &algorithms, Files &files, std::vector<Vertex*> &vertices, std::vector<Edge*> &edges,
                            unsigned &idStart, unsigned &idFinish, std::string &algorithm, std::vector<Edge*> &floydsEdges,
                            bool &loaded, Path &path, unsigned &cost, unsigned &displayed, std::vector<Path*> &floydsPaths,
-                           std::vector<unsigned> &costs){
+                           std::vector<unsigned> &costs, std::pair<unsigned, std::pair<Vertex*, Vertex*>> &result){
     sf::Event event;
     while (window.pollEvent(event)){
         switch (event.type){
@@ -87,8 +87,10 @@ void Interface::events(sf::Window &window, Algorithms &algorithms, Files &files,
                                 cost = algorithms.primsAlgorithm(vertices, edges, path);
                             else if(algorithm == "FLOYD")
                                 algorithms.floydsAlgorithm(vertices, edges, floydsEdges, floydsPaths, costs);
-                            //else if(algorithm == "MASTS")
-                                //algorithms.mastsAlgorithm();
+                            else if(algorithm == "MASTS")
+                                result = algorithms.mastsAlgorithm(vertices);
+                            else if(algorithm == "BRUTE")
+                                result = algorithms.bruteAlgorithm(vertices);
                         }
                         catch(...){
                             std::string msg = "Fatal error while loading from file " + files.getFile() + " No file or directory";
@@ -157,7 +159,8 @@ void Interface::write(sf::RenderWindow &window, const std::string msg, const uns
 void Interface::draw(sf::RenderWindow &window, Files &files, const std::string algorithm,
                    int &frame, int &pause, bool loaded, std::vector<Vertex*> vertices, std::vector<Edge*> edges,
                    std::vector<Edge*> floydsEdges, Path path, unsigned &cost, unsigned displayed,
-                   std::vector<Path*> floydsPaths, std::vector<unsigned> costs)
+                   std::vector<Path*> floydsPaths, std::vector<unsigned> costs,
+                   std::pair<unsigned, std::pair<Vertex*, Vertex*>> &result)
 {
     if(!pause)                                                                                                                          ///Mrugajaca strzalka
         frame++;
@@ -179,11 +182,13 @@ void Interface::draw(sf::RenderWindow &window, Files &files, const std::string a
 
     if(algorithm == "FLOYD")
         cost = costs.at(displayed);
-    std::stringstream a;
-    a << cost;
-    std::string allCosts = a.str();
-    std::string text = "Koszt grafu ";
-    Interface::write(window, "> "+text+allCosts,(WIDTH / 2) - 578, 130);                                                                   ///Wyswietlanie kosztu grafu
+    if(algorithm != "MASTS" && algorithm != "BRUTE"){
+        std::stringstream a;
+        a << cost;
+        std::string allCosts = a.str();
+        std::string text = "Koszt grafu ";
+        Interface::write(window, "> "+text+allCosts,(WIDTH / 2) - 578, 130);
+    }                                                                   ///Wyswietlanie kosztu grafu
 
     if(algorithm == "FLOYD")
     {
@@ -238,7 +243,18 @@ void Interface::draw(sf::RenderWindow &window, Files &files, const std::string a
                 window.draw(floydsPaths.at(displayed)->getVertexCircle(i, 0));
                 window.draw(floydsPaths.at(displayed)->getVertexCircle(i, 1));
             }
-
+        else if(algorithm == "MASTS" || algorithm == "BRUTE"){
+            Interface::write(window, "> Najwieksza odleglosc ", (WIDTH / 2) - 578, 130);
+            std::stringstream dist;
+            dist << result.first;
+            std::stringstream id1;
+            id1 << result.second.first->getID();
+            std::stringstream id2;
+            id2 << result.second.second->getID();
+            Interface::write(window, dist.str(), (WIDTH / 2) - 560, 160);
+            Interface::write(window, " miedzy "+id1.str(),(WIDTH / 2) - 540, 160);
+            Interface::write(window, ", a "+id2.str(),(WIDTH / 2) - 460, 160);
+        }
         ///Tutaj dopisywac nowe window.draw();
     }
     window.display();

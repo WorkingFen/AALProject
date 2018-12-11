@@ -11,6 +11,7 @@
 
 int main()
 {
+    std::pair<unsigned, std::pair<Vertex*, Vertex*>> result;
     std::vector<Vertex*> vertices;
     std::vector<Edge*> edges;
     std::vector<Edge*> floydsEdges;
@@ -41,9 +42,9 @@ int main()
     while (window.isOpen())
     {
         Interface::events(window, algorithms, files, vertices, edges, idStart, idFinish, algorithm,
-                        floydsEdges, loaded, path, cost, displayed, floydsPaths, costs);
+                        floydsEdges, loaded, path, cost, displayed, floydsPaths, costs, result);
         Interface::draw(window, files, algorithm, frame, pause, loaded, vertices, edges,
-                        floydsEdges, path, cost, displayed, floydsPaths, costs);
+                        floydsEdges, path, cost, displayed, floydsPaths, costs, result);
     }
 }
 

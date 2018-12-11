@@ -64,6 +64,8 @@ class Vertex{
 
         double getY(){ return y; }
 
+        unsigned getDistance(){ return distance; }
+
         Vertex* getNeighbour(int index){ return neighbours.at(index); }
 
         int getNeighboursSize(){ return neighbours.size(); }

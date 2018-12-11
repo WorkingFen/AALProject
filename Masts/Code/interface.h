@@ -22,7 +22,7 @@ namespace Interface
     void events(sf::Window &window, Algorithms &algorithms, Files &files, std::vector<Vertex*> &vertices, std::vector<Edge*> &edges,
                     unsigned &idStart, unsigned &idFinish, std::string &algorithm, std::vector<Edge*> &floydsEdges,
                     bool &loaded, Path &path, unsigned &cost, unsigned &displayed, std::vector<Path*> &floydsPaths,
-                    std::vector<unsigned> &costs);
+                    std::vector<unsigned> &costs, std::pair<unsigned, std::pair<Vertex*, Vertex*>> &result);
 
     void write(sf::RenderWindow &window, const std::string msg, const unsigned x, const unsigned y,
                     sf::Color color = sf::Color::White, unsigned size = 24);
@@ -30,6 +30,7 @@ namespace Interface
     void draw(sf::RenderWindow &window, Files &files, const std::string algorithm, int &frame,
                     int &pause, bool loaded, std::vector<Vertex*> vertices, std::vector<Edge*> edges,
                     std::vector<Edge*> floydsEdges, Path path, unsigned &cost, unsigned displayed,
-                    std::vector<Path*> floydsPaths, std::vector<unsigned> costs);
+                    std::vector<Path*> floydsPaths, std::vector<unsigned> costs,
+                    std::pair<unsigned, std::pair<Vertex*, Vertex*>> &result);
 
 }

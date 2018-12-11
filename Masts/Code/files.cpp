@@ -55,7 +55,7 @@ void Files::read(std::vector<Vertex*> &vertices, std::vector<Edge*> &edges, unsi
             }
             else if(line == "VERTICES")
             {
-                if(algorithm == "MASTS"){
+                if(algorithm == "MASTS" || algorithm == "BRUTE"){
                     id = atoi(response.c_str());              ///Pierwsza liczba zostala juz pobrana; Usuwamy znak 0, by mieć liczbę;
                     loading >> x;
                     loading >> y;
@@ -88,29 +88,48 @@ void Files::read(std::vector<Vertex*> &vertices, std::vector<Edge*> &edges, unsi
             }
             else if(line == "EDGES")
             {
-                id = atoi(response.c_str());                    ///Pierwsza liczba zostala juz pobrana; Usuwamy znak 0, by mieć liczbę;
-                loading >> idVer0;
-                loading >> idVer1;
-                vertices.at(idVer0-1)->addNeighbour(idVer1, vertices.at(idVer1-1)->getX(), vertices.at(idVer1-1)->getY());
-                vertices.at(idVer1-1)->addNeighbour(idVer0, vertices.at(idVer0-1)->getX(), vertices.at(idVer0-1)->getY());
-                edges.push_back(new Edge(id, vertices.at(idVer0-1), vertices.at(idVer1-1)));
+                if(algorithm == "MASTS" || algorithm == "BRUTE"){
+                    id = atoi(response.c_str());                    ///Pierwsza liczba zostala juz pobrana; Usuwamy znak 0, by mieć liczbę;
+                    loading >> idVer0;
+                    loading >> idVer1;
+                    vertices.at(idVer0-1)->addNeighbour(idVer1, vertices.at(idVer1-1)->getX(), vertices.at(idVer1-1)->getY());
+                    vertices.at(idVer1-1)->addNeighbour(idVer0, vertices.at(idVer0-1)->getX(), vertices.at(idVer0-1)->getY());
+                    edges.push_back(new Edge(id, vertices.at(idVer0-1), vertices.at(idVer1-1), vertices.at(idVer0-1)->getDistance()));
 
-                for(unsigned i=1; i<edgesNum; i++)
-                {
-                    loading >> id;
+                    for(unsigned i=1; i<edgesNum; i++)
+                    {
+                        loading >> id;
+                        loading >> idVer0;
+                        loading >> idVer1;
+                        vertices.at(idVer0-1)->addNeighbour(idVer1, vertices.at(idVer1-1)->getX(), vertices.at(idVer1-1)->getY());
+                        vertices.at(idVer1-1)->addNeighbour(idVer0, vertices.at(idVer0-1)->getX(), vertices.at(idVer0-1)->getY());
+                        edges.push_back(new Edge(id, vertices.at(idVer0-1), vertices.at(idVer1-1), vertices.at(idVer0-1)->getDistance()));
+                    }
+                }
+                else{
+                    id = atoi(response.c_str());                    ///Pierwsza liczba zostala juz pobrana; Usuwamy znak 0, by mieć liczbę;
                     loading >> idVer0;
                     loading >> idVer1;
                     vertices.at(idVer0-1)->addNeighbour(idVer1, vertices.at(idVer1-1)->getX(), vertices.at(idVer1-1)->getY());
                     vertices.at(idVer1-1)->addNeighbour(idVer0, vertices.at(idVer0-1)->getX(), vertices.at(idVer0-1)->getY());
                     edges.push_back(new Edge(id, vertices.at(idVer0-1), vertices.at(idVer1-1)));
+
+                    for(unsigned i=1; i<edgesNum; i++)
+                    {
+                        loading >> id;
+                        loading >> idVer0;
+                        loading >> idVer1;
+                        vertices.at(idVer0-1)->addNeighbour(idVer1, vertices.at(idVer1-1)->getX(), vertices.at(idVer1-1)->getY());
+                        vertices.at(idVer1-1)->addNeighbour(idVer0, vertices.at(idVer0-1)->getX(), vertices.at(idVer0-1)->getY());
+                        edges.push_back(new Edge(id, vertices.at(idVer0-1), vertices.at(idVer1-1)));
+                    }
                 }
             }
             else if(line == "ADDITIONAL")
             {
-                if(algorithm == "PATH")
-                    forSwitch = 1;
-                else if(algorithm == "FLOYD")
-                    forSwitch = 2;
+                if(algorithm == "PATH") forSwitch = 1;
+                else if(algorithm == "FLOYD") forSwitch = 2;
+                else forSwitch = 0;
                 switch(forSwitch)
                 {
                     case 1:

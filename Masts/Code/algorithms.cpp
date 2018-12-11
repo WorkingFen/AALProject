@@ -15,8 +15,8 @@
 unsigned Algorithms::primsAlgorithm(std::vector<Vertex*> vertices, std::vector<Edge*> edges, Path &path)
 {
 
-    Vertex* vertex = vertices.at(0);                                   ///Vertex startowy
-    unsigned minScale[vertices.size()+1];                                  ///Wagi polaczen do danych wezlow
+    Vertex* vertex = vertices.at(0);                                            ///Vertex startowy
+    unsigned minScale[vertices.size()+1];                                       ///Wagi polaczen do danych wezlow
     bool checked[vertices.size()+1];
     unsigned newID = 0;
     unsigned connections[vertices.size()+1][vertices.size()+1];                ///Lacza z wektora w formie tabeli
@@ -291,3 +291,107 @@ void Algorithms::floydsAlgorithm(std::vector<Vertex*> vertices, std::vector<Edge
 
 }
 
+std::pair<unsigned, std::pair<Vertex*, Vertex*>> Algorithms::mastsAlgorithm(std::vector<Vertex*> vertices){
+    unsigned sumDis = 0;
+
+    for(auto tmp : vertices){
+        sumDis += tmp->getDistance();
+    }
+
+    unsigned averageDis = sumDis >> 1;
+    unsigned actualDis = 0;
+    unsigned bestDis = 0;
+    std::pair<Vertex*, Vertex*> bestVer;
+
+    unsigned prevVertex = 0;
+    unsigned prevDis = 0;
+
+    std::pair<unsigned, std::pair<Vertex*, Vertex*>> result;
+
+    for(unsigned chosen = 0; chosen < vertices.size(); chosen++){
+        for(unsigned temp = chosen; temp != vertices.size(); temp = (temp+1)%vertices.size()){
+            actualDis += vertices.at(temp)->getDistance();
+            if(actualDis >= averageDis){
+                if(prevDis == averageDis || actualDis  == averageDis){
+                    bestVer.first = vertices.at(chosen);
+                    if((prevDis-averageDis) == 0){
+                        bestVer.second = vertices.at(prevVertex+1);
+                        result.first = prevDis;
+                    }
+                    else{
+                        bestVer.second = vertices.at(temp+1);
+                        result.first = actualDis;
+                    }
+                    result.second = bestVer;
+                    return result;
+                }
+                else if(bestDis > averageDis && bestDis < actualDis){
+                    if((bestDis - averageDis) > (averageDis - prevDis)){
+                        bestVer.first = vertices.at(chosen);
+                        bestVer.second = vertices.at(prevVertex+1);
+                        bestDis = prevDis;
+                    }
+                }
+                else if(bestDis < averageDis && bestDis > prevDis){
+                    if((averageDis - bestDis) > (actualDis - averageDis)){
+                        bestVer.first = vertices.at(chosen);
+                        bestVer.second = vertices.at(temp+1);
+                        bestDis = actualDis;
+                    }
+                }
+                else if((bestDis < averageDis && bestDis < prevDis) || (bestDis > averageDis && bestDis > actualDis)){
+                    bestVer.first = vertices.at(chosen);
+                    if((actualDis - averageDis) >= (averageDis - prevDis)){
+                        bestVer.second = vertices.at(prevVertex+1);
+                        bestDis = prevDis;
+                    }
+                    else{
+                        bestVer.second = vertices.at(temp+1);
+                        bestDis = actualDis;
+                    }
+                }
+                break;
+            }
+            prevVertex = temp;
+            prevDis = actualDis;
+        }
+        prevVertex = 0;
+        prevDis = 0;
+        actualDis = 0;
+    }
+    result.first = bestDis;
+    result.second = bestVer;
+    return result;
+}
+
+std::pair<unsigned, std::pair<Vertex*, Vertex*>> Algorithms::bruteAlgorithm(std::vector<Vertex*> vertices){
+    unsigned sumDis = 0;
+
+    for(auto tmp : vertices){
+        sumDis += tmp->getDistance();
+    }
+
+    unsigned averageDis = sumDis >> 1;
+    unsigned actualDis = 0;
+    unsigned bestDis = 0;
+    unsigned hello = 0;
+    std::pair<Vertex*, Vertex*> bestVer;
+
+    std::pair<unsigned, std::pair<Vertex*, Vertex*>> result;
+
+    for(unsigned chosen = 0; chosen < vertices.size(); chosen++){
+        for(unsigned target = (chosen+1)%vertices.size(); target != chosen; target = (target+1)%vertices.size()){
+            for(unsigned temp = chosen; temp != target; temp = (temp+1)%vertices.size())
+                actualDis += vertices.at(temp)->getDistance();
+            if(actualDis <= averageDis && actualDis > bestDis){
+                bestVer.first = vertices.at(chosen);
+                bestVer.second = vertices.at(target);
+                bestDis = actualDis;
+            }
+            actualDis = 0;
+        }
+    }
+    result.first = bestDis;
+    result.second = bestVer;
+    return result;
+}
