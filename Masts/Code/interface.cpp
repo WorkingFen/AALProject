@@ -87,10 +87,12 @@ void Interface::events(sf::Window &window, Algorithms &algorithms, Files &files,
                                 cost = algorithms.primsAlgorithm(vertices, edges, path);
                             else if(algorithm == "FLOYD")
                                 algorithms.floydsAlgorithm(vertices, edges, floydsEdges, floydsPaths, costs);
-                            else if(algorithm == "MASTS")
-                                result = algorithms.mastsAlgorithm(vertices);
                             else if(algorithm == "BRUTE")
                                 result = algorithms.bruteAlgorithm(vertices);
+                            else if(algorithm == "MASTS")
+                                result = algorithms.mastsAlgorithm(vertices);
+                            else if(algorithm == "LINEAR")
+                                result = algorithms.linearAlgorithm(vertices);
                         }
                         catch(...){
                             std::string msg = "Fatal error while loading from file " + files.getFile() + " No file or directory";
@@ -182,7 +184,7 @@ void Interface::draw(sf::RenderWindow &window, Files &files, const std::string a
 
     if(algorithm == "FLOYD")
         cost = costs.at(displayed);
-    if(algorithm != "MASTS" && algorithm != "BRUTE"){
+    if(algorithm != "BRUTE" && algorithm != "MASTS" && algorithm != "LINEAR"){
         std::stringstream a;
         a << cost;
         std::string allCosts = a.str();
@@ -243,7 +245,7 @@ void Interface::draw(sf::RenderWindow &window, Files &files, const std::string a
                 window.draw(floydsPaths.at(displayed)->getVertexCircle(i, 0));
                 window.draw(floydsPaths.at(displayed)->getVertexCircle(i, 1));
             }
-        else if(algorithm == "MASTS" || algorithm == "BRUTE"){
+        else if(algorithm == "BRUTE" || algorithm == "MASTS" || algorithm == "LINEAR"){
             Interface::write(window, "> Najwieksza odleglosc ", (WIDTH / 2) - 578, 130);
             std::stringstream dist;
             dist << result.first;

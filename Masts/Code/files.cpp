@@ -55,7 +55,7 @@ void Files::read(std::vector<Vertex*> &vertices, std::vector<Edge*> &edges, unsi
             }
             else if(line == "VERTICES")
             {
-                if(algorithm == "MASTS" || algorithm == "BRUTE"){
+                if(algorithm == "BRUTE" || algorithm == "MASTS" || algorithm == "LINEAR"){
                     id = atoi(response.c_str());              ///Pierwsza liczba zostala juz pobrana; Usuwamy znak 0, by mieć liczbę;
                     loading >> x;
                     loading >> y;
@@ -88,7 +88,7 @@ void Files::read(std::vector<Vertex*> &vertices, std::vector<Edge*> &edges, unsi
             }
             else if(line == "EDGES")
             {
-                if(algorithm == "MASTS" || algorithm == "BRUTE"){
+                if(algorithm == "BRUTE" || algorithm == "MASTS" || algorithm == "LINEAR"){
                     id = atoi(response.c_str());                    ///Pierwsza liczba zostala juz pobrana; Usuwamy znak 0, by mieć liczbę;
                     loading >> idVer0;
                     loading >> idVer1;

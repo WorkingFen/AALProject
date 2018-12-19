@@ -291,7 +291,8 @@ void Algorithms::floydsAlgorithm(std::vector<Vertex*> vertices, std::vector<Edge
 
 }
 
-std::pair<unsigned, std::pair<Vertex*, Vertex*>> Algorithms::mastsAlgorithm(std::vector<Vertex*> vertices){
+std::pair<unsigned, std::pair<Vertex*, Vertex*>> Algorithms::linearAlgorithm(std::vector<Vertex*> vertices){
+    unsigned len = vertices.size();
     unsigned sumDis = 0;
 
     for(auto tmp : vertices){
@@ -301,25 +302,93 @@ std::pair<unsigned, std::pair<Vertex*, Vertex*>> Algorithms::mastsAlgorithm(std:
     unsigned averageDis = sumDis >> 1;
     unsigned actualDis = 0;
     unsigned bestDis = 0;
+    unsigned prevDis = 0;
     std::pair<Vertex*, Vertex*> bestVer;
 
-    unsigned prevVertex = 0;
-    unsigned prevDis = 0;
+    unsigned backVertex = vertices.size();
 
     std::pair<unsigned, std::pair<Vertex*, Vertex*>> result;
 
-    for(unsigned chosen = 0; chosen < vertices.size(); chosen++){
-        for(unsigned temp = chosen; temp != vertices.size(); temp = (temp+1)%vertices.size()){
+    for(unsigned frontVertex = 0; backVertex != 0 ; frontVertex = (frontVertex+1)%len){
+        if(actualDis >= averageDis){
+            if(prevDis == averageDis || actualDis  == averageDis){
+                bestVer.first = vertices.at(backVertex%len);
+                if((prevDis-averageDis) == 0){
+                    bestVer.second = vertices.at(frontVertex);
+                    result.first = prevDis;
+                }
+                else{
+                    bestVer.second = vertices.at((frontVertex+1)%len);
+                    result.first = actualDis;
+                }
+                result.second = bestVer;
+                return result;
+            }
+            else if(bestDis > averageDis && bestDis < actualDis){
+                if((bestDis - averageDis) > (averageDis - prevDis)){
+                    bestVer.first = vertices.at(backVertex%len);
+                    bestVer.second = vertices.at(frontVertex);
+                    bestDis = prevDis;
+                }
+            }
+            else if(bestDis < averageDis && bestDis > prevDis){
+                if((averageDis - bestDis) > (actualDis - averageDis)){
+                    bestVer.first = vertices.at(backVertex%len);
+                    bestVer.second = vertices.at((frontVertex+1)%len);
+                    bestDis = actualDis;
+                }
+            }
+            else if((bestDis < averageDis && bestDis < prevDis) || (bestDis > averageDis && bestDis > actualDis)){
+                bestVer.first = vertices.at(backVertex%len);
+                if((actualDis - averageDis) >= (averageDis - prevDis)){
+                    bestVer.second = vertices.at(frontVertex);
+                    bestDis = prevDis;
+                }
+                else{
+                    bestVer.second = vertices.at((frontVertex+1)%len);
+                    bestDis = actualDis;
+                }
+            }
+            actualDis-=vertices.at(backVertex%len)->getDistance();
+            backVertex = (backVertex%len)+1;
+            continue;
+        }
+        prevDis = actualDis;
+        actualDis += vertices.at(frontVertex)->getDistance();
+    }
+    result.first = bestDis;
+    result.second = bestVer;
+    return result;
+}
+
+std::pair<unsigned, std::pair<Vertex*, Vertex*>> Algorithms::mastsAlgorithm(std::vector<Vertex*> vertices){
+    unsigned len = vertices.size();
+    unsigned sumDis = 0;
+
+    for(auto tmp : vertices){
+        sumDis += tmp->getDistance();
+    }
+
+    unsigned averageDis = sumDis >> 1;
+    unsigned actualDis = 0;
+    unsigned bestDis = 0;
+    unsigned prevDis = 0;
+    std::pair<Vertex*, Vertex*> bestVer;
+
+    std::pair<unsigned, std::pair<Vertex*, Vertex*>> result;
+
+    for(unsigned chosen = 0; chosen < len; chosen++){
+        for(unsigned temp = chosen; temp != len; temp = (temp+1)%len){
             actualDis += vertices.at(temp)->getDistance();
             if(actualDis >= averageDis){
                 if(prevDis == averageDis || actualDis  == averageDis){
                     bestVer.first = vertices.at(chosen);
                     if((prevDis-averageDis) == 0){
-                        bestVer.second = vertices.at(prevVertex+1);
+                        bestVer.second = vertices.at(temp);
                         result.first = prevDis;
                     }
                     else{
-                        bestVer.second = vertices.at(temp+1);
+                        bestVer.second = vertices.at((temp+1)%len);
                         result.first = actualDis;
                     }
                     result.second = bestVer;
@@ -328,34 +397,32 @@ std::pair<unsigned, std::pair<Vertex*, Vertex*>> Algorithms::mastsAlgorithm(std:
                 else if(bestDis > averageDis && bestDis < actualDis){
                     if((bestDis - averageDis) > (averageDis - prevDis)){
                         bestVer.first = vertices.at(chosen);
-                        bestVer.second = vertices.at(prevVertex+1);
+                        bestVer.second = vertices.at(temp);
                         bestDis = prevDis;
                     }
                 }
                 else if(bestDis < averageDis && bestDis > prevDis){
                     if((averageDis - bestDis) > (actualDis - averageDis)){
                         bestVer.first = vertices.at(chosen);
-                        bestVer.second = vertices.at(temp+1);
+                        bestVer.second = vertices.at((temp+1)%len);
                         bestDis = actualDis;
                     }
                 }
                 else if((bestDis < averageDis && bestDis < prevDis) || (bestDis > averageDis && bestDis > actualDis)){
                     bestVer.first = vertices.at(chosen);
                     if((actualDis - averageDis) >= (averageDis - prevDis)){
-                        bestVer.second = vertices.at(prevVertex+1);
+                        bestVer.second = vertices.at(temp);
                         bestDis = prevDis;
                     }
                     else{
-                        bestVer.second = vertices.at(temp+1);
+                        bestVer.second = vertices.at((temp+1)%len);
                         bestDis = actualDis;
                     }
                 }
                 break;
             }
-            prevVertex = temp;
             prevDis = actualDis;
         }
-        prevVertex = 0;
         prevDis = 0;
         actualDis = 0;
     }
@@ -365,6 +432,7 @@ std::pair<unsigned, std::pair<Vertex*, Vertex*>> Algorithms::mastsAlgorithm(std:
 }
 
 std::pair<unsigned, std::pair<Vertex*, Vertex*>> Algorithms::bruteAlgorithm(std::vector<Vertex*> vertices){
+    unsigned len = vertices.size();
     unsigned sumDis = 0;
 
     for(auto tmp : vertices){
@@ -374,14 +442,13 @@ std::pair<unsigned, std::pair<Vertex*, Vertex*>> Algorithms::bruteAlgorithm(std:
     unsigned averageDis = sumDis >> 1;
     unsigned actualDis = 0;
     unsigned bestDis = 0;
-    unsigned hello = 0;
     std::pair<Vertex*, Vertex*> bestVer;
 
     std::pair<unsigned, std::pair<Vertex*, Vertex*>> result;
 
-    for(unsigned chosen = 0; chosen < vertices.size(); chosen++){
-        for(unsigned target = (chosen+1)%vertices.size(); target != chosen; target = (target+1)%vertices.size()){
-            for(unsigned temp = chosen; temp != target; temp = (temp+1)%vertices.size())
+    for(unsigned chosen = 0; chosen < len; chosen++){
+        for(unsigned target = (chosen+1)%len; target != chosen; target = (target+1)%len){
+            for(unsigned temp = chosen; temp != target; temp = (temp+1)%len)
                 actualDis += vertices.at(temp)->getDistance();
             if(actualDis <= averageDis && actualDis > bestDis){
                 bestVer.first = vertices.at(chosen);

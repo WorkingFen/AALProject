@@ -1,7 +1,7 @@
 # Every line that starts with # will be ignored
 # Order of vertices is significant
-# Algorithm, which will be called; [MST, PATH, FLOYD, MASTS, BRUTE]
-ALGORITHM = MASTS
+# Algorithm, which will be called; [MST, PATH, FLOYD, BRUTE, MASTS, LINEAR]
+ALGORITHM = LINEAR
 # Number of vertices. Vertices has been numbered from 1
 VERTICES = 7
 # Every vertex has three or four atributes (ID, X coordinate, Y coordinate, Distance[to next vertex])
