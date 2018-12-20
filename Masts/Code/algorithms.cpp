@@ -300,25 +300,25 @@ std::pair<unsigned, std::pair<Vertex*, Vertex*>> Algorithms::linearAlgorithm(std
     }
 
     unsigned averageDis = sumDis >> 1;
-    unsigned actualDis = 0;
-    unsigned bestDis = 0;
     unsigned prevDis = 0;
+    unsigned actualDis = 0;
+
+    unsigned bestDis = 0;
     std::pair<Vertex*, Vertex*> bestVer;
+    std::pair<unsigned, std::pair<Vertex*, Vertex*>> result;
 
     unsigned backVertex = vertices.size();
-
-    std::pair<unsigned, std::pair<Vertex*, Vertex*>> result;
 
     for(unsigned frontVertex = 0; backVertex != 0 ; frontVertex = (frontVertex+1)%len){
         if(actualDis >= averageDis){
             if(prevDis == averageDis || actualDis  == averageDis){
                 bestVer.first = vertices.at(backVertex%len);
                 if((prevDis-averageDis) == 0){
-                    bestVer.second = vertices.at(frontVertex);
+                    bestVer.second = vertices.at((frontVertex-1)%len);
                     result.first = prevDis;
                 }
                 else{
-                    bestVer.second = vertices.at((frontVertex+1)%len);
+                    bestVer.second = vertices.at(frontVertex);
                     result.first = actualDis;
                 }
                 result.second = bestVer;
@@ -327,30 +327,32 @@ std::pair<unsigned, std::pair<Vertex*, Vertex*>> Algorithms::linearAlgorithm(std
             else if(bestDis > averageDis && bestDis < actualDis){
                 if((bestDis - averageDis) > (averageDis - prevDis)){
                     bestVer.first = vertices.at(backVertex%len);
-                    bestVer.second = vertices.at(frontVertex);
+                    bestVer.second = vertices.at((frontVertex-1)%len);
                     bestDis = prevDis;
                 }
             }
             else if(bestDis < averageDis && bestDis > prevDis){
                 if((averageDis - bestDis) > (actualDis - averageDis)){
                     bestVer.first = vertices.at(backVertex%len);
-                    bestVer.second = vertices.at((frontVertex+1)%len);
+                    bestVer.second = vertices.at(frontVertex);
                     bestDis = actualDis;
                 }
             }
             else if((bestDis < averageDis && bestDis < prevDis) || (bestDis > averageDis && bestDis > actualDis)){
                 bestVer.first = vertices.at(backVertex%len);
                 if((actualDis - averageDis) >= (averageDis - prevDis)){
-                    bestVer.second = vertices.at(frontVertex);
+                    bestVer.second = vertices.at((frontVertex-1)%len);
                     bestDis = prevDis;
                 }
                 else{
-                    bestVer.second = vertices.at((frontVertex+1)%len);
+                    bestVer.second = vertices.at(frontVertex);
                     bestDis = actualDis;
                 }
             }
             actualDis-=vertices.at(backVertex%len)->getDistance();
+            prevDis-=vertices.at(backVertex%len)->getDistance();
             backVertex = (backVertex%len)+1;
+            frontVertex--;
             continue;
         }
         prevDis = actualDis;
