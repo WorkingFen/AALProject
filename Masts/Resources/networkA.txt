@@ -1,6 +1,6 @@
 # Every line that starts with # will be ignored
 # Order of vertices is significant
-# Algorithm, which will be called; [MST, PATH, FLOYD, BRUTE, MASTS, LINEAR]
+# Algorithm, which will be called; [BRUTE, MASTS, LINEAR]
 ALGORITHM = LINEAR
 # Number of vertices. Vertices has been numbered from 1
 VERTICES = 7
@@ -12,13 +12,6 @@ VERTICES = 7
 5 60 25 9
 6 45 15 1
 7 20 15 7
-# 1 10 30
-# 2 15 50
-# 3 30 60
-# 4 55 55
-# 5 60 25
-# 6 45 15
-# 7 20 15
 # Number of edges
 EDGES = 7
 # Every edge has three atributes (ID, first vertex, last vertex)
@@ -29,10 +22,3 @@ EDGES = 7
 5 5 6
 6 6 7
 7 7 1
-ADDITIONAL
-# If algorithm is of type PATH then in next line we need to specify pair of vertices we are interested in
-# 1 7
-# If algorithm is of type FLOYD then in next lines we need to specify pairs of vertices we are interested in
-# 2 3
-# 5 2
-# 3 6

@@ -18,8 +18,7 @@ class Files{
         std::string file;
 
     public:
-        void read(std::vector<Vertex*> &vertices, std::vector<Edge*> &edges, unsigned &idStart,
-                    unsigned &idFinish, std::string &algorithm, std::vector<Edge*> &floydsEdges, bool &loaded);
+        void read(std::vector<Vertex*> &vertices, std::vector<Edge*> &edges, std::string &algorithm, bool &loaded);
 
         std::string getFile(){ return file; }
 

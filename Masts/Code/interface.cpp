@@ -63,10 +63,9 @@ char Interface::SFMLtoASCII(sf::Keyboard::Key code){
 }
 
 ///Writing file's name and closing executable program
-void Interface::events(sf::Window &window, Algorithms &algorithms, Files &files, std::vector<Vertex*> &vertices, std::vector<Edge*> &edges,
-                           unsigned &idStart, unsigned &idFinish, std::string &algorithm, std::vector<Edge*> &floydsEdges,
-                           bool &loaded, Path &path, unsigned &cost, unsigned &displayed, std::vector<Path*> &floydsPaths,
-                           std::vector<unsigned> &costs, std::pair<unsigned, std::pair<Vertex*, Vertex*>> &result){
+void Interface::events(sf::Window &window, Algorithms &algorithms, Files &files, std::vector<Vertex*> &vertices,
+                           std::vector<Edge*> &edges, std::string &algorithm,
+                           bool &loaded, std::pair<unsigned, std::pair<Vertex*, Vertex*>> &result){
     sf::Event event;
     while (window.pollEvent(event)){
         switch (event.type){
@@ -79,15 +78,8 @@ void Interface::events(sf::Window &window, Algorithms &algorithms, Files &files,
                         try{
                             vertices.clear();
                             edges.clear();
-                            path.clearPath();
-                            files.read(vertices, edges, idStart, idFinish, algorithm, floydsEdges, loaded);
-                            if(algorithm == "PATH")
-                                cost = algorithms.dijkstrasAlgorithm(vertices, edges, path, idStart, idFinish);
-                            else if(algorithm == "MST")
-                                cost = algorithms.primsAlgorithm(vertices, edges, path);
-                            else if(algorithm == "FLOYD")
-                                algorithms.floydsAlgorithm(vertices, edges, floydsEdges, floydsPaths, costs);
-                            else if(algorithm == "BRUTE")
+                            files.read(vertices, edges, algorithm, loaded);
+                            if(algorithm == "BRUTE")
                                 result = algorithms.bruteAlgorithm(vertices);
                             else if(algorithm == "MASTS")
                                 result = algorithms.mastsAlgorithm(vertices);
@@ -100,24 +92,6 @@ void Interface::events(sf::Window &window, Algorithms &algorithms, Files &files,
                             exit(20);
                         }
                         files.setFile("");
-                        break;
-                    case sf::Keyboard::Left:
-                        if(algorithm == "FLOYD")
-                        {
-                            if(displayed==0)
-                                displayed=floydsEdges.size()-1;
-                            else
-                                --displayed;
-                        }
-                        break;
-                    case sf::Keyboard::Right:
-                        if(algorithm == "FLOYD")
-                        {
-                            if(displayed==floydsEdges.size()-1)
-                                displayed=0;
-                            else
-                                displayed++;
-                        }
                         break;
                     case sf::Keyboard::BackSpace:
                         if(files.getFile() != "") files.popFile();
@@ -160,8 +134,6 @@ void Interface::write(sf::RenderWindow &window, const std::string msg, const uns
 ///Drawing function
 void Interface::draw(sf::RenderWindow &window, Files &files, const std::string algorithm,
                    int &frame, int &pause, bool loaded, std::vector<Vertex*> vertices, std::vector<Edge*> edges,
-                   std::vector<Edge*> floydsEdges, Path path, unsigned &cost, unsigned displayed,
-                   std::vector<Path*> floydsPaths, std::vector<unsigned> costs,
                    std::pair<unsigned, std::pair<Vertex*, Vertex*>> &result)
 {
     if(!pause)                                                                                                                          ///Mrugajaca strzalka
@@ -181,27 +153,6 @@ void Interface::draw(sf::RenderWindow &window, Files &files, const std::string a
     Interface::write(window, files.getFile().c_str() , (WIDTH / 2) - 563, 65, sf::Color::White, 32);                                     ///Wyswietlanie wpisywanego tekstu
 
     Interface::write(window, "> "+algorithm,(WIDTH / 2) - 578, 100);                                                                       ///Wyswietlanie nazwy algorytmu
-
-    if(algorithm == "FLOYD")
-        cost = costs.at(displayed);
-    if(algorithm != "BRUTE" && algorithm != "MASTS" && algorithm != "LINEAR"){
-        std::stringstream a;
-        a << cost;
-        std::string allCosts = a.str();
-        std::string text = "Koszt grafu ";
-        Interface::write(window, "> "+text+allCosts,(WIDTH / 2) - 578, 130);
-    }                                                                   ///Wyswietlanie kosztu grafu
-
-    if(algorithm == "FLOYD")
-    {
-        std::stringstream a;
-        a << floydsEdges.at(displayed)->getIDVer(0);
-        std::string id = a.str();
-        std::stringstream b;
-        b << floydsEdges.at(displayed)->getIDVer(1);
-        std::string id2 = b.str();
-        Interface::write(window, "> "+id+" "+id2,(WIDTH / 2) - 578, 160);
-    }
 
     if(loaded)
     {
@@ -225,27 +176,7 @@ void Interface::draw(sf::RenderWindow &window, Files &files, const std::string a
                          (edges.at(i)->getVertexY(0)+edges.at(i)->getVertexY(1))*4-8, sf::Color::White, 14);
         }
 
-        if(algorithm == "MST" || algorithm == "PATH")
-            for(unsigned i = 0; i< path.getPathSize(); i++)                                                                             ///Rysowanie sciezki dla MST i SCIEZKA
-            {
-                path.changeEdgeColor(i, sf::Color(154,68,234), sf::Color(4,249,160));
-                path.changeVertexColor(i, 0, sf::Color(154,68,234));
-                path.changeVertexColor(i, 1, sf::Color(154,68,234));
-                window.draw(path.getLine(i));
-                window.draw(path.getVertexCircle(i, 0));
-                window.draw(path.getVertexCircle(i, 1));
-            }
-        else if(algorithm == "FLOYD")
-            for(unsigned i = 0; i<floydsPaths.at(displayed)->getPathSize(); i++)                                                        ///Rysowanie sciezki dla FLOYD
-            {
-                floydsPaths.at(displayed)->changeEdgeColor(i, sf::Color(154,68,234), sf::Color(4,249,160));
-                floydsPaths.at(displayed)->changeVertexColor(i, 0, sf::Color(154,68,234));
-                floydsPaths.at(displayed)->changeVertexColor(i, 1, sf::Color(154,68,234));
-                window.draw(floydsPaths.at(displayed)->getLine(i));
-                window.draw(floydsPaths.at(displayed)->getVertexCircle(i, 0));
-                window.draw(floydsPaths.at(displayed)->getVertexCircle(i, 1));
-            }
-        else if(algorithm == "BRUTE" || algorithm == "MASTS" || algorithm == "LINEAR"){
+        if(algorithm == "BRUTE" || algorithm == "MASTS" || algorithm == "LINEAR"){
             Interface::write(window, "> Najwieksza odleglosc ", (WIDTH / 2) - 578, 130);
             std::stringstream dist;
             dist << result.first;
