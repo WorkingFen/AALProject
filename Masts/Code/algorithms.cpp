@@ -69,7 +69,7 @@ std::pair<unsigned, std::pair<Vertex*, Vertex*>> Algorithms::linearAlgorithm(std
             actualDis-=vertices.at(backVertex%len)->getDistance();
             prevDis-=vertices.at(backVertex%len)->getDistance();
             backVertex = (backVertex%len)+1;
-            frontVertex--;
+            frontVertex = (frontVertex-1)%len;
             continue;
         }
         prevDis = actualDis;
