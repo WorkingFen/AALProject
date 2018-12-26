@@ -4,7 +4,8 @@
 ALGORITHM = LINEAR
 # Number of vertices. Vertices has been numbered from 1
 VERTICES = 7
-# Every vertex has three or four atributes (ID, X coordinate, Y coordinate, Distance[to next vertex])
+# Every vertex has two (ID, Distance[to next vertex]) or four atributes (ID, X coordinate, Y coordinate, Distance)
+# It depends on number of vertices. If more than 20, then graph won't be created
 1 10 30 5
 2 15 50 3
 3 30 60 4

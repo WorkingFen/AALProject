@@ -74,7 +74,7 @@ class Vertex{
 
         void setOutlineColor(sf::Color color){ circle.setOutlineColor(color); }
 
-/// /// /// /// /// /// /// /// Functions other than for Edge
+/// /// /// /// /// /// /// /// Functions other than for this Vertex
 /// /// Vertex functions
 ///
         unsigned getNeighbourID(unsigned index){ return neighbours.at(index)->getID(); }

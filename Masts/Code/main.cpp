@@ -9,7 +9,7 @@
 #include <cmath>
 #include "interface.h"
 
-int main()
+int main(int argc, char* argv[])
 {
     std::pair<unsigned, std::pair<Vertex*, Vertex*>> result;
     std::vector<Vertex*> vertices;
@@ -32,7 +32,8 @@ int main()
 
     while (window.isOpen())
     {
-        Interface::events(window, algorithms, files, vertices, edges, algorithm, loaded, result);
+        if(argc == 1)
+            Interface::events(window, algorithms, files, vertices, edges, algorithm, loaded, result);
         Interface::draw(window, files, algorithm, frame, pause, loaded, vertices, edges, result);
     }
 }

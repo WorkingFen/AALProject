@@ -70,10 +70,15 @@ Zanim zaczniemy cokolwiek pobierać, to najpierw muszę cokolwiek zrobić.
 2. Naciśnij PPM na nazwę projektu
 3. Wybierz opcję **_Add files_**
 4. Wybierz pliki, które chcesz dodać do projektu
-5. Zatwierdź wybór   
+5. Zatwierdź wybór 
+
+### Pomoc do programu Generator
+
+[Help me](https://github.com/WorkingFen/AALProject/tree/master/Generator/HELP.md) with generator 
  
 ## Technologie
 Biblioteka graficzna - [SFML](https://www.sfml-dev.org/)
+Czcionka - [MunroNarrow](http://www.tenbytwenty.com/#munro)
 
 ## Autor
 - **Zawadka Piotr** - [WorkingFen](https://github.com/WorkingFen)
