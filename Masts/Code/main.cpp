@@ -26,6 +26,11 @@ int main(int argc, char* argv[])
     Algorithms algorithms;
     Files files;
 
+    if(argc >= 2){
+        std::string str(argv[1]);
+        files.setFile(str);
+    }
+
     srand(time(NULL));
 
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Masts");
