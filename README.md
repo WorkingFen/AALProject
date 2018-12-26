@@ -77,8 +77,8 @@ Zanim zaczniemy cokolwiek pobierać, to najpierw muszę cokolwiek zrobić.
 [Help me](https://github.com/WorkingFen/AALProject/tree/master/Generator/HELP.md) with generator 
  
 ## Technologie
-Biblioteka graficzna - [SFML](https://www.sfml-dev.org/)
-Czcionka - [MunroNarrow](http://www.tenbytwenty.com/#munro)
+- Biblioteka graficzna - [SFML](https://www.sfml-dev.org/)
+- Czcionka - [MunroNarrow](http://www.tenbytwenty.com/#munro)
 
 ## Autor
 - **Zawadka Piotr** - [WorkingFen](https://github.com/WorkingFen)
