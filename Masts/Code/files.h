@@ -12,13 +12,15 @@
 #include <cstdlib>
 #include "edge.h"
 
+#define ERROR_VERTICES_AMOUNT 1
+
 class Files{
     private:
         std::ifstream loading;
         std::string file;
 
     public:
-        void read(std::vector<Vertex*> &vertices, std::vector<Edge*> &edges, std::string &algorithm, bool &loaded);
+        int read(std::vector<Vertex*> &vertices, std::vector<Edge*> &edges, std::string &algorithm, bool &loaded);
 
         std::string getFile(){ return file; }
 

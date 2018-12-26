@@ -8,7 +8,7 @@
 
 #include "files.h"
 
-void Files::read(std::vector<Vertex*> &vertices, std::vector<Edge*> &edges, std::string &algorithm, bool &loaded)
+int Files::read(std::vector<Vertex*> &vertices, std::vector<Edge*> &edges, std::string &algorithm, bool &loaded)
 {
     std::string line;
     std::string response;
@@ -40,6 +40,7 @@ void Files::read(std::vector<Vertex*> &vertices, std::vector<Edge*> &edges, std:
                 line = response;
                 loading >> hollow;
                 loading >> verticesNum;
+                if(verticesNum <= 1) return ERROR_VERTICES_AMOUNT;
             }
             else if(response == "EDGES")
             {
@@ -49,41 +50,79 @@ void Files::read(std::vector<Vertex*> &vertices, std::vector<Edge*> &edges, std:
             }
             else if(line == "VERTICES")
             {
-                if(algorithm == "BRUTE" || algorithm == "MASTS" || algorithm == "LINEAR"){
-                    id = atoi(response.c_str());
-                    loading >> x;
-                    loading >> y;
-                    loading >> distance;
-                    vertices.push_back(new Vertex(id, x, y, distance));
-
-                    for(unsigned i=1; i<verticesNum; i++)
-                    {
-                        loading >> id;
+                if(verticesNum <= 20){
+                    if(algorithm == "BRUTE" || algorithm == "MASTS" || algorithm == "LINEAR"){
+                        id = atoi(response.c_str());
                         loading >> x;
                         loading >> y;
                         loading >> distance;
                         vertices.push_back(new Vertex(id, x, y, distance));
+
+                        for(unsigned i=1; i<verticesNum; i++)
+                        {
+                            loading >> id;
+                            loading >> x;
+                            loading >> y;
+                            loading >> distance;
+                            vertices.push_back(new Vertex(id, x, y, distance));
+                        }
+                    }
+                }
+                else{
+                    if(algorithm == "BRUTE" || algorithm == "MASTS" || algorithm == "LINEAR"){
+                        id = atoi(response.c_str());
+                        loading >> distance;
+                        vertices.push_back(new Vertex(id, distance));
+
+                        for(unsigned i=1; i<verticesNum; i++)
+                        {
+                            loading >> id;
+                            loading >> distance;
+                            vertices.push_back(new Vertex(id, distance));
+                        }
                     }
                 }
             }
             else if(line == "EDGES")
             {
-                if(algorithm == "BRUTE" || algorithm == "MASTS" || algorithm == "LINEAR"){
-                    id = atoi(response.c_str());
-                    loading >> idVer0;
-                    loading >> idVer1;
-                    vertices.at(idVer0-1)->addNeighbour(idVer1, vertices.at(idVer1-1)->getX(), vertices.at(idVer1-1)->getY());
-                    vertices.at(idVer1-1)->addNeighbour(idVer0, vertices.at(idVer0-1)->getX(), vertices.at(idVer0-1)->getY());
-                    edges.push_back(new Edge(id, vertices.at(idVer0-1), vertices.at(idVer1-1), vertices.at(idVer0-1)->getDistance()));
-
-                    for(unsigned i=1; i<edgesNum; i++)
-                    {
-                        loading >> id;
+                if(verticesNum <= 20){
+                    if(algorithm == "BRUTE" || algorithm == "MASTS" || algorithm == "LINEAR"){
+                        id = atoi(response.c_str());
                         loading >> idVer0;
                         loading >> idVer1;
-                        vertices.at(idVer0-1)->addNeighbour(idVer1, vertices.at(idVer1-1)->getX(), vertices.at(idVer1-1)->getY());
-                        vertices.at(idVer1-1)->addNeighbour(idVer0, vertices.at(idVer0-1)->getX(), vertices.at(idVer0-1)->getY());
+                        vertices.at(idVer0-1)->addNeighbour(idVer1, vertices.at(idVer1-1)->getX(), vertices.at(idVer1-1)->getY(), vertices.at(idVer1-1)->getDistance());
+                        vertices.at(idVer1-1)->addNeighbour(idVer0, vertices.at(idVer0-1)->getX(), vertices.at(idVer0-1)->getY(), vertices.at(idVer0-1)->getDistance());
                         edges.push_back(new Edge(id, vertices.at(idVer0-1), vertices.at(idVer1-1), vertices.at(idVer0-1)->getDistance()));
+
+                        for(unsigned i=1; i<edgesNum; i++)
+                        {
+                            loading >> id;
+                            loading >> idVer0;
+                            loading >> idVer1;
+                            vertices.at(idVer0-1)->addNeighbour(idVer1, vertices.at(idVer1-1)->getX(), vertices.at(idVer1-1)->getY(), vertices.at(idVer1-1)->getDistance());
+                            vertices.at(idVer1-1)->addNeighbour(idVer0, vertices.at(idVer0-1)->getX(), vertices.at(idVer0-1)->getY(), vertices.at(idVer0-1)->getDistance());
+                            edges.push_back(new Edge(id, vertices.at(idVer0-1), vertices.at(idVer1-1), vertices.at(idVer0-1)->getDistance()));
+                        }
+                    }
+                }
+                else{
+                    if(algorithm == "BRUTE" || algorithm == "MASTS" || algorithm == "LINEAR"){
+                        id = atoi(response.c_str());
+                        loading >> idVer0;
+                        loading >> idVer1;
+                        vertices.at(idVer0-1)->addNeighbour(idVer1, vertices.at(idVer1-1)->getDistance());
+                        vertices.at(idVer1-1)->addNeighbour(idVer0, vertices.at(idVer0-1)->getDistance());
+                        edges.push_back(new Edge(id, vertices.at(idVer0-1), vertices.at(idVer1-1), vertices.at(idVer0-1)->getDistance()));
+
+                        for(unsigned i=1; i<edgesNum; i++)
+                        {
+                            loading >> id;
+                            loading >> idVer0;
+                            loading >> idVer1;
+                            vertices.at(idVer0-1)->addNeighbour(idVer1, vertices.at(idVer1-1)->getDistance());
+                            vertices.at(idVer1-1)->addNeighbour(idVer0, vertices.at(idVer0-1)->getDistance());
+                            edges.push_back(new Edge(id, vertices.at(idVer0-1), vertices.at(idVer1-1), vertices.at(idVer0-1)->getDistance()));
+                        }
                     }
                 }
             }
@@ -96,4 +135,5 @@ void Files::read(std::vector<Vertex*> &vertices, std::vector<Edge*> &edges, std:
     }
     this->loading.close();
     loaded = true;
+    return 0;
 }

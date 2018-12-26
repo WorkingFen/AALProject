@@ -63,7 +63,7 @@ char Interface::SFMLtoASCII(sf::Keyboard::Key code){
 }
 
 ///Writing file's name and closing executable program
-void Interface::events(sf::Window &window, Algorithms &algorithms, Files &files, std::vector<Vertex*> &vertices,
+int Interface::events(sf::Window &window, Algorithms &algorithms, Files &files, std::vector<Vertex*> &vertices,
                            std::vector<Edge*> &edges, std::string &algorithm,
                            bool &loaded, std::pair<unsigned, std::pair<Vertex*, Vertex*>> &result){
     sf::Event event;
@@ -78,7 +78,7 @@ void Interface::events(sf::Window &window, Algorithms &algorithms, Files &files,
                         try{
                             vertices.clear();
                             edges.clear();
-                            files.read(vertices, edges, algorithm, loaded);
+                            if(files.read(vertices, edges, algorithm, loaded)) return ERROR_VERTICES_AMOUNT;
                             if(algorithm == "BRUTE")
                                 result = algorithms.bruteAlgorithm(vertices);
                             else if(algorithm == "MASTS")
@@ -113,6 +113,7 @@ void Interface::events(sf::Window &window, Algorithms &algorithms, Files &files,
                 break;
         } //switch[event.type]
     } //while
+    return 0;
 } //Function
 
 ///Writing function
@@ -156,24 +157,26 @@ void Interface::draw(sf::RenderWindow &window, Files &files, const std::string a
 
     if(loaded)
     {
-        for(unsigned i = 0; i< vertices.size(); i++)                                                                                    ///Rysowanie wierzcholkow
-        {
-            window.draw(vertices.at(i)->getCircle());
-            std::stringstream a;
-            a << (i+1);
-            std::string s = a.str();
-            Interface::write(window, s, vertices.at(i)->getX()*8+190, vertices.at(i)->getY()*8-20);
-        }
+        if(vertices.size() <= 20){
+            for(unsigned i = 0; i< vertices.size(); i++)                                                                                    ///Rysowanie wierzcholkow
+            {
+                window.draw(vertices.at(i)->getCircle());
+                std::stringstream a;
+                a << (i+1);
+                std::string s = a.str();
+                Interface::write(window, s, WIDTH/2 + vertices.at(i)->getX()*8 - 10, HEIGHT/2 - vertices.at(i)->getY()*8 - 25);
+            }
 
-        for(unsigned i = 0; i< edges.size(); i++)                                                                                       ///Rysowanie polaczen
-        {
-            window.draw(edges.at(i)->getLine());
-            std::stringstream a;
-            a << edges.at(i)->getScale();
-            std::string s = a.str();
-            Interface::write(window, s,
-                         (edges.at(i)->getVertexX(0)+edges.at(i)->getVertexX(1))*4+200,
-                         (edges.at(i)->getVertexY(0)+edges.at(i)->getVertexY(1))*4-8, sf::Color::White, 14);
+            for(unsigned i = 0; i< edges.size(); i++)                                                                                       ///Rysowanie polaczen
+            {
+                window.draw(edges.at(i)->getLine());
+                std::stringstream a;
+                a << edges.at(i)->getScale();
+                std::string s = a.str();
+                Interface::write(window, s,
+                             WIDTH/2 + (edges.at(i)->getVertexX(0)+edges.at(i)->getVertexX(1))*4 + 10,
+                             HEIGHT/2 - (edges.at(i)->getVertexY(0)+edges.at(i)->getVertexY(1))*4 + 10, sf::Color::White, 16);
+            }
         }
 
         if(algorithm == "BRUTE" || algorithm == "MASTS" || algorithm == "LINEAR"){

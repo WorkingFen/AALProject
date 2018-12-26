@@ -31,7 +31,7 @@ std::pair<unsigned, std::pair<Vertex*, Vertex*>> Algorithms::linearAlgorithm(std
             if(prevDis == averageDis || actualDis  == averageDis){
                 bestVer.first = vertices.at(backVertex%len);
                 if((prevDis-averageDis) == 0){
-                    bestVer.second = vertices.at((frontVertex-1)%len);
+                    bestVer.second = vertices.at((!frontVertex)?(len-1):((frontVertex-1)%len));
                     result.first = prevDis;
                 }
                 else{
@@ -44,7 +44,7 @@ std::pair<unsigned, std::pair<Vertex*, Vertex*>> Algorithms::linearAlgorithm(std
             else if(bestDis > averageDis && bestDis < actualDis){
                 if((bestDis - averageDis) > (averageDis - prevDis)){
                     bestVer.first = vertices.at(backVertex%len);
-                    bestVer.second = vertices.at((frontVertex-1)%len);
+                    bestVer.second = vertices.at((!frontVertex)?(len-1):((frontVertex-1)%len));
                     bestDis = prevDis;
                 }
             }
@@ -58,7 +58,7 @@ std::pair<unsigned, std::pair<Vertex*, Vertex*>> Algorithms::linearAlgorithm(std
             else if((bestDis < averageDis && bestDis < prevDis) || (bestDis > averageDis && bestDis > actualDis)){
                 bestVer.first = vertices.at(backVertex%len);
                 if((actualDis - averageDis) >= (averageDis - prevDis)){
-                    bestVer.second = vertices.at((frontVertex-1)%len);
+                    bestVer.second = vertices.at((!frontVertex)?(len-1):((frontVertex-1)%len));
                     bestDis = prevDis;
                 }
                 else{
@@ -69,7 +69,7 @@ std::pair<unsigned, std::pair<Vertex*, Vertex*>> Algorithms::linearAlgorithm(std
             actualDis-=vertices.at(backVertex%len)->getDistance();
             prevDis-=vertices.at(backVertex%len)->getDistance();
             backVertex = (backVertex+1)%len;
-            frontVertex = (frontVertex-1)%len;
+            frontVertex = (!frontVertex)?(len-1):((frontVertex-1)%len);
             continue;
         }
         prevDis = actualDis;

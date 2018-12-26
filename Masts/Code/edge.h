@@ -31,8 +31,8 @@ class Edge{
             vertices[1] = fin;
             scale = (std::rand() % 50) + 1;
             line = sf::VertexArray(sf::Lines, 2);
-            line[0].position = sf::Vector2f(start->getX()*8 + 210, start->getY()*8+10);
-            line[1].position = sf::Vector2f(fin->getX()*8 + 210, fin->getY()*8+10);
+            line[0].position = sf::Vector2f(WIDTH/2 + start->getX()*8 + 10 ,HEIGHT/2 - start->getY()*8 + 10);
+            line[1].position = sf::Vector2f(WIDTH/2 + fin->getX()*8 + 10 ,HEIGHT/2 - fin->getY()*8 + 10);
             changeLineColor(sf::Color::White);
         }
 
@@ -41,8 +41,8 @@ class Edge{
             vertices[0] = start;
             vertices[1] = fin;
             line = sf::VertexArray(sf::Lines, 2);
-            line[0].position = sf::Vector2f(start->getX()*8 + 210, start->getY()*8+10);
-            line[1].position = sf::Vector2f(fin->getX()*8 + 210, fin->getY()*8+10);
+            line[0].position = sf::Vector2f(WIDTH/2 + start->getX()*8 + 10 ,HEIGHT/2 - start->getY()*8 + 10);
+            line[1].position = sf::Vector2f(WIDTH/2 + fin->getX()*8 + 10 ,HEIGHT/2 - fin->getY()*8 + 10);
             changeLineColor(sf::Color::White);
         }
 

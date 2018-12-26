@@ -10,8 +10,6 @@
 #include "algorithms.h"
 #include "files.h"
 
-#define WIDTH 1366
-#define HEIGHT 768
 #define BACKGROUND sf::Color(8,8,16)
 
 ///Namespace with interface logic
@@ -19,7 +17,7 @@ namespace Interface
 {
     char SFMLtoASCII(sf::Keyboard::Key code);
 
-    void events(sf::Window &window, Algorithms &algorithms, Files &files, std::vector<Vertex*> &vertices,
+    int events(sf::Window &window, Algorithms &algorithms, Files &files, std::vector<Vertex*> &vertices,
                     std::vector<Edge*> &edges, std::string &algorithm,
                     bool &loaded, std::pair<unsigned, std::pair<Vertex*, Vertex*>> &result);
 
