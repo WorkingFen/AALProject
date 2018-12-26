@@ -2,7 +2,7 @@
 
 ## Instalacja biblioteki SFML dla Code::Blocks 
 
-Wymagane do projektu [Masts]()
+Wymagane do projektu [Masts](https://github.com/WorkingFen/AALProject/tree/master/Masts)
 
 1. Wprowadź pobrane biblioteki SFML do katalogu, do ścieżki którego masz łatwy dostęp
 2. Utwórz nowy projekt Code::Blocks i [wprowadź pliki z repozytorium](#wprowadzanie-plików-do-projektu-codeblocks)
@@ -63,3 +63,4 @@ Wymagane do projektu [Masts]()
 5. Zatwierdź wybór
 6. Przejdź do **_Build Options_** projektu
 7. Zaznacz w **_Compiler Flags_** flagę **-std=c++11**
+8. Zapisz wprowadzone zmiany

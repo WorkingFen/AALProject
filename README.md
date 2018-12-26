@@ -15,8 +15,8 @@ Zanim zaczniemy cokolwiek pobierać, to najpierw trzeba wiedzieć co należy zro
 
 ### Instalacja
  
-1. [SFML dla Code::Blocks]()
-2. [Wprowadzanie plików]()
+1. [SFML dla Code::Blocks](https://github.com/WorkingFen/AALProject/blob/master/INSTALL.md#instalacja-biblioteki-sfml-dla-codeblocks)
+2. [Wprowadzanie plików](https://github.com/WorkingFen/AALProject/blob/master/INSTALL.md#wprowadzanie-plik%C3%B3w-do-projektu-codeblocks)
  
 ### Pomoc do programu Masts
 
