@@ -11,6 +11,7 @@
 #include "files.h"
 
 #define BACKGROUND sf::Color(8,8,16)
+#define PI 3.141592
 
 ///Namespace with interface logic
 namespace Interface

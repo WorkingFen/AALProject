@@ -7,7 +7,6 @@
 */
 
 #include "generator.h"
-#define PI 3.141592
 
 void Generator::write(std::string filename, std::string algorithm, unsigned vertices)
 {

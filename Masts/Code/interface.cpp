@@ -100,6 +100,7 @@ int Interface::events(sf::Window &window, Algorithms &algorithms, Files &files, 
                         files.pushFile(SFMLtoASCII(event.key.code));
                         break;
                 }
+                break;
             case sf::Event::MouseButtonPressed:                                                                                         ///Event::MouseButtonPressed
                 switch (event.mouseButton.button){
                     case sf::Mouse::Middle:
@@ -148,12 +149,12 @@ void Interface::draw(sf::RenderWindow &window, Files &files, const std::string a
 
     window.clear(BACKGROUND);                                                                                                           ///Okno ma pewien wyznaczony kolor
 
-    Interface::write(window, ">", (WIDTH / 2) - 598, 65, sf::Color::White, 32);
-    if(!frame)
-        Interface::write(window, "_", (WIDTH / 2) - 583, 65, sf::Color::White, 32);
-    Interface::write(window, files.getFile().c_str() , (WIDTH / 2) - 563, 65, sf::Color::White, 32);                                     ///Wyswietlanie wpisywanego tekstu
+    Interface::write(window, "Wpisz nazwe pliku z ktorego odczytane maja byc dane", (WIDTH / 4), 12, sf::Color::White, 36);
 
-    Interface::write(window, "> "+algorithm,(WIDTH / 2) - 578, 100);                                                                       ///Wyswietlanie nazwy algorytmu
+    Interface::write(window, ">", (WIDTH / 2) - 598, 75, sf::Color::White, 32);
+    if(!frame)
+        Interface::write(window, "_", (WIDTH / 2) - 583, 75, sf::Color::White, 32);
+    Interface::write(window, files.getFile().c_str() , (WIDTH / 2) - 563, 75, sf::Color::White, 32);                                     ///Wyswietlanie wpisywanego tekstu
 
     if(loaded)
     {
@@ -164,7 +165,9 @@ void Interface::draw(sf::RenderWindow &window, Files &files, const std::string a
                 std::stringstream a;
                 a << (i+1);
                 std::string s = a.str();
-                Interface::write(window, s, WIDTH/2 + vertices.at(i)->getX()*8 - 10, HEIGHT/2 - vertices.at(i)->getY()*8 - 25);
+                double verSize = vertices.size();
+                Interface::write(window, s, WIDTH/2 + std::round(verSize*(1.8-3/(2*verSize))*sin((2*i*PI)/verSize))*8 +56/verSize,
+                                 HEIGHT/2 - std::round(verSize*(1.8-3/(2*verSize))*cos((2*i*PI)/verSize))*8 +(9*verSize)/8+ 56/verSize);
             }
 
             for(unsigned i = 0; i< edges.size(); i++)                                                                                       ///Rysowanie polaczen
@@ -174,22 +177,67 @@ void Interface::draw(sf::RenderWindow &window, Files &files, const std::string a
                 a << edges.at(i)->getScale();
                 std::string s = a.str();
                 Interface::write(window, s,
-                             WIDTH/2 + (edges.at(i)->getVertexX(0)+edges.at(i)->getVertexX(1))*4 + 10,
-                             HEIGHT/2 - (edges.at(i)->getVertexY(0)+edges.at(i)->getVertexY(1))*4 + 10, sf::Color::White, 16);
+                             WIDTH/2 + (edges.at(i)->getVertexX(0)+edges.at(i)->getVertexX(1))*4.2 +5,
+                             HEIGHT/2 - (edges.at(i)->getVertexY(0)+edges.at(i)->getVertexY(1))*4.2 +20, sf::Color::White, 16);
             }
+        }
+        else{
+            Interface::write(window, "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB", WIDTH/2, HEIGHT/2 - 270, sf::Color::White, 18);
+            Interface::write(window, "BNB------------------------------B B", WIDTH/2, HEIGHT/2 - 252, sf::Color::White, 18);
+            Interface::write(window, "BBB------------------------------BBB", WIDTH/2, HEIGHT/2 - 234, sf::Color::White, 18);
+            Interface::write(window, "BBB------------------------------BBB", WIDTH/2, HEIGHT/2 - 216, sf::Color::White, 18);
+            Interface::write(window, "BBB------------------------------BBB", WIDTH/2, HEIGHT/2 - 198, sf::Color::White, 18);
+            Interface::write(window, "BBB------------------------------BBB", WIDTH/2, HEIGHT/2 - 180, sf::Color::White, 18);
+            Interface::write(window, "BBB------------------------------BBB", WIDTH/2, HEIGHT/2 - 162, sf::Color::White, 18);
+            Interface::write(window, "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB", WIDTH/2, HEIGHT/2 - 144, sf::Color::White, 18);
+            Interface::write(window, "BBBBB++++++++++++++++BBBBBB", WIDTH/2, HEIGHT/2 - 126, sf::Color::White, 18);
+            Interface::write(window, "BBBBB++BBBBB+++++++++++BBBBBB", WIDTH/2, HEIGHT/2 - 108, sf::Color::White, 18);
+            Interface::write(window, "BBBBB++BBBBB+++++++++++BBBBBB", WIDTH/2, HEIGHT/2 - 90, sf::Color::White, 18);
+            Interface::write(window, "BBBBB++BBBBB+++++++++++BBBBBB", WIDTH/2, HEIGHT/2 - 72, sf::Color::White, 18);
+            Interface::write(window, "BBBBB++++++++++++++++BBBBBB", WIDTH/2, HEIGHT/2 - 54, sf::Color::White, 18);
+            Interface::write(window, "BBBBB++++++++++++++++BBBBBB", WIDTH/2, HEIGHT/2 - 36, sf::Color::White, 18);
+            Interface::write(window, "BBBBB++++++++++++++++BBBBBB", WIDTH/2, HEIGHT/2 - 18, sf::Color::White, 18);
+
+            Interface::write(window, "        z###ac              za###c", WIDTH/2, HEIGHT/2 + 36, sf::Color::White, 18);
+            Interface::write(window, "            z###ac      za###c", WIDTH/2, HEIGHT/2 + 54, sf::Color::White, 18);
+            Interface::write(window, "                z###NN###c", WIDTH/2, HEIGHT/2 + 72, sf::Color::White, 18);
+            Interface::write(window, "            z###ac      za###c", WIDTH/2, HEIGHT/2 + 90, sf::Color::White, 18);
+            Interface::write(window, "        z###ac              za###c", WIDTH/2, HEIGHT/2 + 108, sf::Color::White, 18);
+
+
+            Interface::write(window, "Za duzo wierzcholkow, aby wyswietlic graf", WIDTH/2 - 220, HEIGHT/2 + 160, sf::Color::White, 48);
         }
 
         if(algorithm == "BRUTE" || algorithm == "MASTS" || algorithm == "LINEAR"){
-            Interface::write(window, "> Najwieksza odleglosc ", (WIDTH / 2) - 578, 130);
+            Interface::write(window, "> "+algorithm,(WIDTH / 2) - 598, 110);                                                                       ///Wyswietlanie nazwy algorytmu
+
+            std::stringstream numVer;
+            numVer << vertices.size();
+            Interface::write(window, "> Ilosc wierzcholkow grafu: ", (WIDTH / 2) - 598, 140);
+            Interface::write(window, numVer.str(), (WIDTH / 2) - 340, 140);
+
             std::stringstream dist;
             dist << result.first;
+            unsigned sumDis = 0;
+            for(auto tmp : vertices){
+                sumDis += tmp->getDistance();
+            }
+            std::stringstream sumDist;
+            sumDist << sumDis;
+            Interface::write(window, "> Odleglosc/Suma odleglosci: ", (WIDTH / 2) - 598, 170);
+            Interface::write(window, dist.str()+"/"+sumDist.str(), (WIDTH / 2) - 340, 170);
+
             std::stringstream id1;
             id1 << result.second.first->getID();
+            Interface::write(window, "> Pierwszy wierzcholek: ", (WIDTH / 2) - 598, 200);
+            Interface::write(window, id1.str(), (WIDTH / 2) - 340, 200);
+
             std::stringstream id2;
             id2 << result.second.second->getID();
-            Interface::write(window, dist.str(), (WIDTH / 2) - 560, 160);
-            Interface::write(window, " miedzy "+id1.str(),(WIDTH / 2) - 540, 160);
-            Interface::write(window, ", a "+id2.str(),(WIDTH / 2) - 460, 160);
+            Interface::write(window, "> Drugi wierzcholek: ", (WIDTH / 2) - 598, 230);
+            Interface::write(window, id2.str(), (WIDTH / 2) - 340, 230);
+
+            Interface::write(window, "> Czas wykonania algorytmu: ", (WIDTH / 2) - 598, 260);
         }
         ///Tutaj dopisywac nowe window.draw();
     }

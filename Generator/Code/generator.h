@@ -14,6 +14,8 @@
 #include <cmath>
 #include <ctime>
 
+#define PI 3.141592
+
 class Generator{
     private:
         std::ofstream saving;

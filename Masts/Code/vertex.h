@@ -32,7 +32,7 @@ class Vertex{
         Vertex(unsigned id, unsigned distance): id(id), x(0), y(0), distance(distance)
         {
             circle.setRadius(10);
-            circle.setPosition(WIDTH/2 + x*8,HEIGHT/2 - y*8);
+            circle.setPosition(WIDTH/2 + x*8 ,HEIGHT/2 - y*8 +20);
             circle.setOutlineThickness(2);
             circle.setFillColor(sf::Color::Transparent);
             circle.setOutlineColor(sf::Color::White);
@@ -41,7 +41,7 @@ class Vertex{
         Vertex(unsigned id, double x, double y, unsigned distance): id(id), x(x), y(y), distance(distance)
         {
             circle.setRadius(10);
-            circle.setPosition(WIDTH/2 + x*8,HEIGHT/2 - y*8);
+            circle.setPosition(WIDTH/2 + x*8 ,HEIGHT/2 - y*8 +20);
             circle.setOutlineThickness(2);
             circle.setFillColor(sf::Color::Transparent);
             circle.setOutlineColor(sf::Color::White);
