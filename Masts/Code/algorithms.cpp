@@ -8,7 +8,8 @@
 
 #include "algorithms.h"
 
-std::pair<unsigned, std::pair<Vertex*, Vertex*>> Algorithms::linearAlgorithm(std::vector<Vertex*> vertices){
+std::pair<unsigned, std::pair<Vertex*, Vertex*>> Algorithms::linearAlgorithm(std::vector<Vertex*> vertices, std::chrono::duration<double> &elapsedSeconds){
+    auto start = std::chrono::system_clock::now();
     unsigned len = vertices.size();
     unsigned sumDis = 0;
 
@@ -77,10 +78,13 @@ std::pair<unsigned, std::pair<Vertex*, Vertex*>> Algorithms::linearAlgorithm(std
     }
     result.first = bestDis;
     result.second = bestVer;
+    auto end = std::chrono::system_clock::now();
+    elapsedSeconds = end-start;
     return result;
 }
 
-std::pair<unsigned, std::pair<Vertex*, Vertex*>> Algorithms::mastsAlgorithm(std::vector<Vertex*> vertices){
+std::pair<unsigned, std::pair<Vertex*, Vertex*>> Algorithms::mastsAlgorithm(std::vector<Vertex*> vertices, std::chrono::duration<double> &elapsedSeconds){
+    auto start = std::chrono::system_clock::now();
     unsigned len = vertices.size();
     unsigned sumDis = 0;
 
@@ -147,10 +151,13 @@ std::pair<unsigned, std::pair<Vertex*, Vertex*>> Algorithms::mastsAlgorithm(std:
     }
     result.first = bestDis;
     result.second = bestVer;
+    auto end = std::chrono::system_clock::now();
+    elapsedSeconds = end-start;
     return result;
 }
 
-std::pair<unsigned, std::pair<Vertex*, Vertex*>> Algorithms::bruteAlgorithm(std::vector<Vertex*> vertices){
+std::pair<unsigned, std::pair<Vertex*, Vertex*>> Algorithms::bruteAlgorithm(std::vector<Vertex*> vertices, std::chrono::duration<double> &elapsedSeconds){
+    auto start = std::chrono::system_clock::now();
     unsigned len = vertices.size();
     unsigned sumDis = 0;
 
@@ -179,5 +186,7 @@ std::pair<unsigned, std::pair<Vertex*, Vertex*>> Algorithms::bruteAlgorithm(std:
     }
     result.first = bestDis;
     result.second = bestVer;
+    auto end = std::chrono::system_clock::now();
+    elapsedSeconds = end-start;
     return result;
 }

@@ -23,6 +23,8 @@ int main(int argc, char* argv[])
 
     bool loaded = false;
 
+    std::chrono::duration<double> elapsedSeconds;
+
     Algorithms algorithms;
     Files files;
 
@@ -38,7 +40,7 @@ int main(int argc, char* argv[])
 
     while (window.isOpen())
     {
-        if(Interface::events(window, algorithms, files, vertices, edges, algorithm, loaded, result)){
+        if(Interface::events(window, algorithms, files, vertices, edges, algorithm, loaded, result, elapsedSeconds)){
             const char* errorVer = "Wrong amount of vertices! in file ";
             char* msg = new char[sizeof(errorVer)+files.getFile().size()];
             strcpy(msg, errorVer);
@@ -46,7 +48,7 @@ int main(int argc, char* argv[])
             MessageBox(NULL, msg, "ERROR!", MB_ICONEXCLAMATION|MB_OK);
             return ERROR_VERTICES_AMOUNT;
         }
-        Interface::draw(window, files, algorithm, frame, pause, loaded, vertices, edges, result);
+        Interface::draw(window, files, algorithm, frame, pause, loaded, vertices, edges, result, elapsedSeconds);
     }
     return 0;
 }

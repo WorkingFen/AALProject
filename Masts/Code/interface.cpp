@@ -65,7 +65,7 @@ char Interface::SFMLtoASCII(sf::Keyboard::Key code){
 ///Writing file's name and closing executable program
 int Interface::events(sf::Window &window, Algorithms &algorithms, Files &files, std::vector<Vertex*> &vertices,
                            std::vector<Edge*> &edges, std::string &algorithm,
-                           bool &loaded, std::pair<unsigned, std::pair<Vertex*, Vertex*>> &result){
+                           bool &loaded, std::pair<unsigned, std::pair<Vertex*, Vertex*>> &result, std::chrono::duration<double> &elapsedSeconds){
     sf::Event event;
     while (window.pollEvent(event)){
         switch (event.type){
@@ -80,11 +80,11 @@ int Interface::events(sf::Window &window, Algorithms &algorithms, Files &files, 
                             edges.clear();
                             if(files.read(vertices, edges, algorithm, loaded)) return ERROR_VERTICES_AMOUNT;
                             if(algorithm == "BRUTE")
-                                result = algorithms.bruteAlgorithm(vertices);
+                                result = algorithms.bruteAlgorithm(vertices, elapsedSeconds);
                             else if(algorithm == "MASTS")
-                                result = algorithms.mastsAlgorithm(vertices);
+                                result = algorithms.mastsAlgorithm(vertices, elapsedSeconds);
                             else if(algorithm == "LINEAR")
-                                result = algorithms.linearAlgorithm(vertices);
+                                result = algorithms.linearAlgorithm(vertices, elapsedSeconds);
                         }
                         catch(...){
                             std::string msg = "Fatal error while loading from file " + files.getFile() + " No file or directory";
@@ -136,7 +136,7 @@ void Interface::write(sf::RenderWindow &window, const std::string msg, const uns
 ///Drawing function
 void Interface::draw(sf::RenderWindow &window, Files &files, const std::string algorithm,
                    int &frame, int &pause, bool loaded, std::vector<Vertex*> vertices, std::vector<Edge*> edges,
-                   std::pair<unsigned, std::pair<Vertex*, Vertex*>> &result)
+                   std::pair<unsigned, std::pair<Vertex*, Vertex*>> &result, std::chrono::duration<double> elapsedSeconds)
 {
     if(!pause)                                                                                                                          ///Mrugajaca strzalka
         frame++;
@@ -237,7 +237,10 @@ void Interface::draw(sf::RenderWindow &window, Files &files, const std::string a
             Interface::write(window, "> Drugi wierzcholek: ", (WIDTH / 2) - 598, 230);
             Interface::write(window, id2.str(), (WIDTH / 2) - 340, 230);
 
+            std::stringstream time;
+            time << elapsedSeconds.count();
             Interface::write(window, "> Czas wykonania algorytmu: ", (WIDTH / 2) - 598, 260);
+            Interface::write(window, time.str(), (WIDTH / 2) - 598, 290);
         }
         ///Tutaj dopisywac nowe window.draw();
     }

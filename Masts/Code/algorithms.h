@@ -7,15 +7,16 @@
 */
 #pragma once
 
+#include <chrono>
 #include <string>
 #include <cstdlib>
 #include "edge.h"
 
 class Algorithms{
     public:
-        std::pair<unsigned, std::pair<Vertex*, Vertex*>> linearAlgorithm(std::vector<Vertex*> vertices);
+        std::pair<unsigned, std::pair<Vertex*, Vertex*>> linearAlgorithm(std::vector<Vertex*> vertices, std::chrono::duration<double> &elapsedSeconds);
 
-        std::pair<unsigned, std::pair<Vertex*, Vertex*>> mastsAlgorithm(std::vector<Vertex*> vertices);
+        std::pair<unsigned, std::pair<Vertex*, Vertex*>> mastsAlgorithm(std::vector<Vertex*> vertices, std::chrono::duration<double> &elapsedSeconds);
 
-        std::pair<unsigned, std::pair<Vertex*, Vertex*>> bruteAlgorithm(std::vector<Vertex*> vertices);
+        std::pair<unsigned, std::pair<Vertex*, Vertex*>> bruteAlgorithm(std::vector<Vertex*> vertices, std::chrono::duration<double> &elapsedSeconds);
 };
