@@ -1,0 +1,25 @@
+# Every line that starts with # will be ignored
+# Order of vertices is significant
+# Algorithm, which will be called; [BRUTE, MASTS, LINEAR]
+ALGORITHM = BRUTE
+# Number of vertices. Vertices has been numbered from 1
+VERTICES = 7
+# Every vertex has two (ID, Distance[to next vertex]) or four atributes (ID, X coordinate, Y coordinate, Distance)
+# It depends on number of vertices. If more than 20, then graph won't be created
+1 0 14 18
+2 11 9 18
+3 14 -3 8
+4 6 -13 8
+5 -6 -13 17
+6 -14 -3 18
+7 -11 9 16
+# Number of edges
+EDGES = 7
+# Every edge has three atributes (ID, first vertex, last vertex)
+1 1 2
+2 2 3
+3 3 4
+4 4 5
+5 5 6
+6 6 7
+7 7 1

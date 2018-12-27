@@ -136,7 +136,7 @@ void Interface::write(sf::RenderWindow &window, const std::string msg, const uns
 ///Drawing function
 void Interface::draw(sf::RenderWindow &window, Files &files, const std::string algorithm,
                    int &frame, int &pause, bool loaded, std::vector<Vertex*> vertices, std::vector<Edge*> edges,
-                   std::pair<unsigned, std::pair<Vertex*, Vertex*>> &result, std::chrono::duration<double> elapsedSeconds)
+                   std::pair<unsigned, std::pair<Vertex*, Vertex*>> &result, std::chrono::duration<double> &elapsedSeconds)
 {
     if(!pause)                                                                                                                          ///Mrugajaca strzalka
         frame++;
@@ -240,7 +240,7 @@ void Interface::draw(sf::RenderWindow &window, Files &files, const std::string a
             std::stringstream time;
             time << elapsedSeconds.count();
             Interface::write(window, "> Czas wykonania algorytmu: ", (WIDTH / 2) - 598, 260);
-            Interface::write(window, time.str(), (WIDTH / 2) - 598, 290);
+            Interface::write(window, time.str() + " s", (WIDTH / 2) - 598, 290);
         }
         ///Tutaj dopisywac nowe window.draw();
     }

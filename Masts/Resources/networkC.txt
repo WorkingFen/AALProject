@@ -6,26 +6,26 @@ ALGORITHM = LINEAR
 VERTICES = 20
 # Every vertex has two (ID, Distance[to next vertex]) or four atributes (ID, X coordinate, Y coordinate, Distance)
 # It depends on number of vertices. If more than 20, then graph won't be created
-1 0 40 12
-2 12 38 15
-3 24 32 6
-4 32 24 2
-5 38 12 19
-6 40 0 8
-7 38 -12 6
-8 32 -24 2
-9 24 -32 14
-10 12 -38 8
-11 0 -40 14
-12 -12 -38 14
+1 0 40 7
+2 12 38 18
+3 24 32 20
+4 32 24 18
+5 38 12 7
+6 40 0 3
+7 38 -12 2
+8 32 -24 3
+9 24 -32 8
+10 12 -38 11
+11 0 -40 11
+12 -12 -38 15
 13 -24 -32 4
-14 -32 -24 3
-15 -38 -12 18
-16 -40 -0 8
-17 -38 12 14
-18 -32 24 15
-19 -24 32 6
-20 -12 38 17
+14 -32 -24 11
+15 -38 -12 2
+16 -40 -0 15
+17 -38 12 15
+18 -32 24 10
+19 -24 32 19
+20 -12 38 13
 # Number of edges
 EDGES = 20
 # Every edge has three atributes (ID, first vertex, last vertex)

@@ -27,6 +27,6 @@ namespace Interface
 
     void draw(sf::RenderWindow &window, Files &files, const std::string algorithm, int &frame,
                     int &pause, bool loaded, std::vector<Vertex*> vertices, std::vector<Edge*> edges,
-                    std::pair<unsigned, std::pair<Vertex*, Vertex*>> &result, std::chrono::duration<double> elapsedSeconds);
+                    std::pair<unsigned, std::pair<Vertex*, Vertex*>> &result, std::chrono::duration<double> &elapsedSeconds);
 
 }

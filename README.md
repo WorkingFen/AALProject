@@ -12,6 +12,7 @@ Zanim zaczniemy cokolwiek pobierać, to najpierw trzeba wiedzieć co należy zro
    > Oryginalnie robiłem dla Code::Blocks, ze względu na prostszą instalację SFML
 2. Pobranie wszystkich plików, które znajdują się w [tym](https://github.com/WorkingFen/AALProject/tree/master/Masts) repozytorium _Masts_
 3. **Opcjonalne** Pobranie wszystkich plików, które znajdują się w [tym](https://github.com/WorkingFen/AALProject/tree/master/Generator) repozytorium _Generator_
+4. **Opcjonalne** Pobranie skompilowanej wersji programów pod Windowsa [Tutaj](https://github.com/WorkingFen/AALProject/tree/master/Release.zip)
 
 ### Instalacja
  

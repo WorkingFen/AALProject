@@ -105,26 +105,6 @@ int Files::read(std::vector<Vertex*> &vertices, std::vector<Edge*> &edges, std::
                         }
                     }
                 }
-                else{
-                    if(algorithm == "BRUTE" || algorithm == "MASTS" || algorithm == "LINEAR"){
-                        id = atoi(response.c_str());
-                        loading >> idVer0;
-                        loading >> idVer1;
-                        vertices.at(idVer0-1)->addNeighbour(idVer1, vertices.at(idVer1-1)->getDistance());
-                        vertices.at(idVer1-1)->addNeighbour(idVer0, vertices.at(idVer0-1)->getDistance());
-                        edges.push_back(new Edge(id, vertices.at(idVer0-1), vertices.at(idVer1-1), vertices.at(idVer0-1)->getDistance()));
-
-                        for(unsigned i=1; i<edgesNum; i++)
-                        {
-                            loading >> id;
-                            loading >> idVer0;
-                            loading >> idVer1;
-                            vertices.at(idVer0-1)->addNeighbour(idVer1, vertices.at(idVer1-1)->getDistance());
-                            vertices.at(idVer1-1)->addNeighbour(idVer0, vertices.at(idVer0-1)->getDistance());
-                            edges.push_back(new Edge(id, vertices.at(idVer0-1), vertices.at(idVer1-1), vertices.at(idVer0-1)->getDistance()));
-                        }
-                    }
-                }
             }
         }
     }
