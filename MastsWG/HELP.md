@@ -6,7 +6,7 @@ Wszystkie pliki, które mogą być rozwiązane powinny znajdować się w katalog
 Program rozpoczyna działanie po odpaleniu przez terminal i posiada  składnię:
 
 ```
-./Masts.exe [filename] [amount|NONE] [...]
+./MastsWG.exe [filename] [amount|NONE] [...]
 ```
 
 Gdzie:
