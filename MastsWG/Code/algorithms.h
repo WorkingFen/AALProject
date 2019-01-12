@@ -9,7 +9,7 @@
 
 #include <string>
 #include <cstdlib>
-#include "edge.h"
+#include "vertex.h"
 
 class Algorithms{
     public:

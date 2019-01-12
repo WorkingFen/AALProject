@@ -11,6 +11,7 @@ Zanim zaczniemy cokolwiek pobierać, to najpierw trzeba wiedzieć co należy zro
    - Należy pobrać wersję odpowiednią dla swojego kompilatora oraz typu systemu operacyjnego.
    > Oryginalnie robiłem dla Code::Blocks, ze względu na prostszą instalację SFML
 2. Pobranie wszystkich plików, które znajdują się w [tym](https://github.com/WorkingFen/AALProject/tree/master/Masts) repozytorium _Masts_
+3. **Opcjonalne** Pobranie wszystkich plików, które znajdują się w [tym](https://github.com/WorkingFen/AALProject/tree/master/MastsWG) repozytorium _MastsWG_
 3. **Opcjonalne** Pobranie wszystkich plików, które znajdują się w [tym](https://github.com/WorkingFen/AALProject/tree/master/Generator) repozytorium _Generator_
 4. **Opcjonalne** Pobranie skompilowanej wersji programów pod Windowsa [Tutaj](https://github.com/WorkingFen/AALProject/tree/master/Release.zip)
 
@@ -22,6 +23,10 @@ Zanim zaczniemy cokolwiek pobierać, to najpierw trzeba wiedzieć co należy zro
 ### Pomoc do programu Masts
 
 [Help me](https://github.com/WorkingFen/AALProject/tree/master/Masts/HELP.md) with masts
+
+### Pomoc do programu MastsWG
+
+[Help me](https://github.com/WorkingFen/AALProject/tree/master/MastsWG/HELP.md) with mastsWG
  
 ### Pomoc do programu Generator
 

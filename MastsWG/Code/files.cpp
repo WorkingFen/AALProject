@@ -8,16 +8,13 @@
 
 #include "files.h"
 
-int Files::read(std::vector<Vertex*> &vertices, std::vector<Edge*> &edges, std::string &algorithm, bool &loaded)
+int Files::read(std::vector<Vertex*> &vertices, std::string &algorithm, bool &loaded)
 {
     std::string line;
     std::string response;
     std::string hollow;
-    unsigned verticesNum;
-    unsigned edgesNum;
-    unsigned id, idVer0, idVer1;
-    unsigned distance;
-    double x, y;
+    unsigned verticesNum, edgesNum;
+    unsigned id, distance;
 
     this->loading.open("Resources/" + file + ".txt");
     if(loading.good())
@@ -52,18 +49,18 @@ int Files::read(std::vector<Vertex*> &vertices, std::vector<Edge*> &edges, std::
                 if(verticesNum <= 20){
                     if(algorithm == "BRUTE" || algorithm == "MASTS" || algorithm == "LINEAR"){
                         id = atoi(response.c_str());
-                        loading >> x;
-                        loading >> y;
+                        loading >> hollow;
+                        loading >> hollow;
                         loading >> distance;
-                        vertices.push_back(new Vertex(id, x, y, distance));
+                        vertices.push_back(new Vertex(id, distance));
 
                         for(unsigned i=1; i<verticesNum; i++)
                         {
                             loading >> id;
-                            loading >> x;
-                            loading >> y;
+                            loading >> hollow;
+                            loading >> hollow;
                             loading >> distance;
-                            vertices.push_back(new Vertex(id, x, y, distance));
+                            vertices.push_back(new Vertex(id, distance));
                         }
                     }
                 }
@@ -82,29 +79,7 @@ int Files::read(std::vector<Vertex*> &vertices, std::vector<Edge*> &edges, std::
                     }
                 }
             }
-            else if(line == "EDGES")
-            {
-                if(verticesNum <= 20){
-                    if(algorithm == "BRUTE" || algorithm == "MASTS" || algorithm == "LINEAR"){
-                        id = atoi(response.c_str());
-                        loading >> idVer0;
-                        loading >> idVer1;
-                        vertices.at(idVer0-1)->addNeighbour(idVer1, vertices.at(idVer1-1)->getX(), vertices.at(idVer1-1)->getY(), vertices.at(idVer1-1)->getDistance());
-                        vertices.at(idVer1-1)->addNeighbour(idVer0, vertices.at(idVer0-1)->getX(), vertices.at(idVer0-1)->getY(), vertices.at(idVer0-1)->getDistance());
-                        edges.push_back(new Edge(id, vertices.at(idVer0-1), vertices.at(idVer1-1), vertices.at(idVer0-1)->getDistance()));
-
-                        for(unsigned i=1; i<edgesNum; i++)
-                        {
-                            loading >> id;
-                            loading >> idVer0;
-                            loading >> idVer1;
-                            vertices.at(idVer0-1)->addNeighbour(idVer1, vertices.at(idVer1-1)->getX(), vertices.at(idVer1-1)->getY(), vertices.at(idVer1-1)->getDistance());
-                            vertices.at(idVer1-1)->addNeighbour(idVer0, vertices.at(idVer0-1)->getX(), vertices.at(idVer0-1)->getY(), vertices.at(idVer0-1)->getDistance());
-                            edges.push_back(new Edge(id, vertices.at(idVer0-1), vertices.at(idVer1-1), vertices.at(idVer0-1)->getDistance()));
-                        }
-                    }
-                }
-            }
+            else if(line == "EDGES"){}
         }
     }
     else

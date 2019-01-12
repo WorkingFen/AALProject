@@ -65,7 +65,7 @@ char Interface::SFMLtoASCII(sf::Keyboard::Key code){
 ///Writing file's name and closing executable program
 int Interface::events(sf::Window &window, Algorithms &algorithms, Files &files, std::vector<Vertex*> &vertices,
                            std::vector<Edge*> &edges, std::string &algorithm,
-                           bool &loaded, std::pair<unsigned, std::pair<Vertex*, Vertex*>> &result, std::chrono::duration<double> &elapsedSeconds){
+                           bool &loaded, std::pair<unsigned, std::pair<Vertex*, Vertex*>> &result, std::chrono::duration<double> &elapsedSeconds, unsigned &m){
     sf::Event event;
     while (window.pollEvent(event)){
         switch (event.type){
@@ -79,12 +79,17 @@ int Interface::events(sf::Window &window, Algorithms &algorithms, Files &files, 
                             vertices.clear();
                             edges.clear();
                             if(files.read(vertices, edges, algorithm, loaded)) return ERROR_VERTICES_AMOUNT;
-                            if(algorithm == "BRUTE")
-                                result = algorithms.bruteAlgorithm(vertices, elapsedSeconds);
-                            else if(algorithm == "MASTS")
-                                result = algorithms.mastsAlgorithm(vertices, elapsedSeconds);
-                            else if(algorithm == "LINEAR")
-                                result = algorithms.linearAlgorithm(vertices, elapsedSeconds);
+                            auto start = std::chrono::high_resolution_clock::now();
+                            for(unsigned i = 0; i < m; i++){
+                                if(algorithm == "BRUTE")
+                                    result = algorithms.bruteAlgorithm(vertices);
+                                else if(algorithm == "MASTS")
+                                    result = algorithms.mastsAlgorithm(vertices);
+                                else if(algorithm == "LINEAR")
+                                    result = algorithms.linearAlgorithm(vertices);
+                            }
+                            auto end = std::chrono::high_resolution_clock::now();
+                            elapsedSeconds = end-start;
                         }
                         catch(...){
                             std::string msg = "Fatal error while loading from file " + files.getFile() + " No file or directory";

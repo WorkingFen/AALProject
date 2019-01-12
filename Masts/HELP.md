@@ -8,7 +8,7 @@ Program rozpoczyna działanie po odpaleniu przez terminal, bądź po odpaleniu p
 Program odpalany przez terminal ma składnię:
 
 ```
-./Masts.exe [filename|NONE] [...]
+./Masts.exe [filename|NONE] [amount|NONE] [...]
 ```
 
 Gdzie:
@@ -16,9 +16,16 @@ Gdzie:
   ```
   Nie trzeba wpisywać, automatycznie zostanie odpalony program okienkowy, w którym będzie można wpisać żądaną nazwę problemu.
   Po wywołaniu programu, należy nacisnąć **Enter** w celu rozpoczęcia jego działania.
+  W przypadku chęci wpisania liczby iteracji, ten argument nie może pozostać pusty.
   
   ```
   
+- **amount** jest ilością iteracji wykonania problemu (dla lepszego pokazania czasu wykonywania)
+  ```
+  Nie trzeba wpisywać, automatycznie będzie przypisana 1 iteracja.
+  
+  ```
+   
 - reszta argumentów zostanie zignorowana
 
 # Działanie programu okienkowego

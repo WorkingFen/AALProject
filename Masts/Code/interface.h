@@ -7,6 +7,7 @@
 */
 #pragma once
 
+#include <chrono>
 #include "algorithms.h"
 #include "files.h"
 
@@ -20,7 +21,7 @@ namespace Interface
 
     int events(sf::Window &window, Algorithms &algorithms, Files &files, std::vector<Vertex*> &vertices,
                     std::vector<Edge*> &edges, std::string &algorithm,
-                    bool &loaded, std::pair<unsigned, std::pair<Vertex*, Vertex*>> &result, std::chrono::duration<double> &elapsedSeconds);
+                    bool &loaded, std::pair<unsigned, std::pair<Vertex*, Vertex*>> &result, std::chrono::duration<double> &elapsedSeconds, unsigned &m);
 
     void write(sf::RenderWindow &window, const std::string msg, const unsigned x, const unsigned y,
                     sf::Color color = sf::Color::White, unsigned size = 24);

@@ -12,6 +12,7 @@
 
 int main(int argc, char* argv[])
 {
+    unsigned m;
     std::pair<unsigned, std::pair<Vertex*, Vertex*>> result;
     std::vector<Vertex*> vertices;
     std::vector<Edge*> edges;
@@ -28,9 +29,15 @@ int main(int argc, char* argv[])
     Algorithms algorithms;
     Files files;
 
-    if(argc >= 2){
+    if(argc == 2){
         std::string str(argv[1]);
         files.setFile(str);
+        m = 1;
+    }
+    else if(argc >= 3){
+        std::string str(argv[1]);
+        files.setFile(str);
+        m = atoi(argv[2]);
     }
 
     srand(time(NULL));
@@ -40,7 +47,7 @@ int main(int argc, char* argv[])
 
     while (window.isOpen())
     {
-        if(Interface::events(window, algorithms, files, vertices, edges, algorithm, loaded, result, elapsedSeconds)){
+        if(Interface::events(window, algorithms, files, vertices, edges, algorithm, loaded, result, elapsedSeconds, m)){
             const char* errorVer = "Wrong amount of vertices! in file ";
             char* msg = new char[sizeof(errorVer)+files.getFile().size()];
             strcpy(msg, errorVer);
