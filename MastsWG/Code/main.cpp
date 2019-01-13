@@ -9,9 +9,13 @@
 #include <cmath>
 #include <chrono>
 #include <sstream>
-#include "windows.h"
 #include "files.h"
 #include "algorithms.h"
+#ifdef __linux__
+#include <string.h>
+#elif _WIN32
+#include "windows.h"
+#endif
 
 int main(int argc, char* argv[])
 {
@@ -44,9 +48,13 @@ int main(int argc, char* argv[])
         if(files.read(vertices, algorithm, loaded)){
             const char* errorVer = "Wrong amount of vertices! in file ";
             char* msg = new char[sizeof(errorVer)+files.getFile().size()];
+#ifdef __linux__
+	    std::cout << msg << std::endl;
+#elif _WIN32
             strcpy(msg, errorVer);
             strcat(msg, files.getFile().c_str());
             MessageBox(NULL, msg, "ERROR!", MB_ICONEXCLAMATION|MB_OK);
+#endif
             return ERROR_VERTICES_AMOUNT;
         }
         auto start = std::chrono::high_resolution_clock::now();
@@ -63,8 +71,12 @@ int main(int argc, char* argv[])
     }
     catch(...){
         std::string msg = "Fatal error while loading from file " + files.getFile() + " No file or directory";
+#ifdef __linux__
+	std::cout << msg << std::endl;
+#elif _WIN32
         MessageBox(NULL, msg.c_str(), NULL, MB_OK | MB_ICONEXCLAMATION);
         exit(20);
+#endif
     }
     std::cout << "File used: " << files.getFile() << std::endl;
     files.setFile("");
