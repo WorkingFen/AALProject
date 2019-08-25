@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Code\algorithms.cpp" />
+    <ClCompile Include="Code\files.cpp" />
+    <ClCompile Include="Code\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Code\algorithms.h" />
+    <ClInclude Include="Code\files.h" />
+    <ClInclude Include="Code\vertex.h" />
+  </ItemGroup>
+</Project>
